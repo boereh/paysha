@@ -13,10 +13,11 @@ import {
   union,
   custom,
 } from "valibot";
-import { createStorage } from "unstorage";
+import { createStorage, type StorageValue, type Storage } from "unstorage";
 import idb from "unstorage/drivers/indexedb";
 import { randMovie } from "@ngneat/falso";
 import { nanoid } from "nanoid";
+import { useIndexedDB } from "./storage";
 
 const uid = pipe(string(), length(21));
 
@@ -55,46 +56,40 @@ export const BOOK_SCHEMA = object({
 
 export type Book = InferInput<typeof BOOK_SCHEMA>;
 
-export const useBookStorage = (opts?: { store?: string; base?: string }) =>
-  createStorage({
-    driver: idb({
-      dbName: "paysha",
-      storeName: opts?.store || "books",
-      base: opts?.store || "",
-    }),
-  });
-
 export const useBooks = defineStore("useBooks", () => {
   const books = shallowRef<Book[]>([]);
+  let storage: Storage<StorageValue> | null = null;
 
-  if (window) {
-    const storage = useBookStorage();
+  async function load() {
+    if (typeof window === "undefined") return;
 
-    storage.getKeys().then(async (keys) => {
-      for (const key of keys) {
-        const book = await storage.get<Book>(key);
+    storage = useIndexedDB({ store: "books" });
 
-        if (!book) continue;
+    for (const key of await storage.getKeys()) {
+      const book = await storage.get<Book>(key);
 
-        try {
-          book.created = new Date(book.created);
-          book.modified = new Date(book.modified);
-        } catch (e) {
-          continue;
-        }
+      if (!book) continue;
 
-        if (!safeParse(BOOK_SCHEMA, book).success) continue;
-
-        books.value = [...books.value, book];
+      try {
+        book.created = new Date(book.created);
+        book.modified = new Date(book.modified);
+      } catch (e) {
+        continue;
       }
-    });
 
-    watch(books, (v) => v.map((b) => storage.set(b.id, b)));
+      if (!safeParse(BOOK_SCHEMA, book).success) continue;
+
+      books.value = [...books.value, book];
+    }
   }
 
-  async function fetch() {}
+  watch(books, async (books) => {
+    if (!storage) return;
 
-  return { books, fetch };
+    for (const book of books) await storage.set(book.id, book);
+  });
+
+  return { books, load };
 });
 
 function createFakeBooks(): Book[] {

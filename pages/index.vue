@@ -40,7 +40,7 @@ const books = useBooks();
 
       <h1>Create Book</h1>
 
-      <input type="text" placeholder="Name" />
+      <ui-input type="text" placeholder="Name" />
     </ui-dialog>
   </div>
 </template>
