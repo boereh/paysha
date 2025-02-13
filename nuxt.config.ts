@@ -3,7 +3,6 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from "unocss";
-import Aura from "@primevue/themes/aura";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -12,6 +11,11 @@ export default defineNuxtConfig({
   modules: ["@unocss/nuxt", "@nuxt/fonts", "@pinia/nuxt", "@vueuse/nuxt"],
   css: ["@unocss/reset/tailwind.css"],
   unocss: {
+    theme: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+    },
     transformers: [
       transformerCompileClass(),
       transformerDirectives(),

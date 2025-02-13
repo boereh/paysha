@@ -12,6 +12,7 @@ import {
   literal,
   union,
   custom,
+  is,
 } from "valibot";
 import { createStorage, type StorageValue, type Storage } from "unstorage";
 import idb from "unstorage/drivers/indexedb";
@@ -58,15 +59,19 @@ export type Book = InferInput<typeof BOOK_SCHEMA>;
 
 export const useBooks = defineStore("useBooks", () => {
   const books = shallowRef<Book[]>([]);
+  const is_loading = ref(false);
   let storage: Storage<StorageValue> | null = null;
 
   async function load() {
     if (typeof window === "undefined") return;
+    if (is_loading.value) return;
+    is_loading.value = true;
 
     storage = useIndexedDB({ store: "books" });
 
     for (const key of await storage.getKeys()) {
       const book = await storage.get<Book>(key);
+      console.log(key);
 
       if (!book) continue;
 
@@ -81,15 +86,17 @@ export const useBooks = defineStore("useBooks", () => {
 
       books.value = [...books.value, book];
     }
+
+    is_loading.value = false;
   }
 
   watch(books, async (books) => {
-    if (!storage) return;
+    if (!storage || is_loading.value) return;
 
     for (const book of books) await storage.set(book.id, book);
   });
 
-  return { books, load };
+  return { books, load, is_loading };
 });
 
 function createFakeBooks(): Book[] {

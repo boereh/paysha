@@ -6,6 +6,6 @@ export const useIndexedDB = (opts?: { store?: string; base?: string }) =>
     driver: idb({
       dbName: "paysha",
       storeName: opts?.store || "main",
-      base: opts?.store || "",
+      base: opts?.base || "",
     }),
   });
