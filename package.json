@@ -10,31 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@ngneat/falso": "^7.3.0",
-    "@nuxt/fonts": "^0.10.3",
-    "@nuxt/ui": "^2.21.0",
-    "@phosphor-icons/vue": "^2.2.1",
-    "@pinia/nuxt": "^0.9.0",
-    "@unocss/nuxt": "^65.4.2",
-    "@unocss/reset": "^65.4.2",
-    "@vueuse/core": "^12.4.0",
-    "@vueuse/integrations": "^12.4.0",
-    "@vueuse/nuxt": "^12.4.0",
-    "ant-design-vue": "^4.2.6",
-    "dayjs": "^1.11.13",
-    "focus-trap": "^7.6.4",
-    "idb-keyval": "^6.2.1",
-    "nanoid": "^5.0.9",
-    "nuxt": "^3.15.2",
-    "pinia": "^2.3.0",
-    "radix-vue": "^1.9.12",
-    "uniqolor": "^1.1.1",
-    "unocss": "^65.4.2",
-    "unstorage": "^1.14.4",
-    "valibot": "1.0.0-beta.12",
-    "vaul-vue": "^0.2.0",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "@iconify-json/lucide": "^1.2.44",
+    "@nuxt/fonts": "0.11.4",
+    "@nuxt/icon": "1.13.0",
+    "@unocss/nuxt": "^66.1.2",
+    "@vueuse/core": "^13.2.0",
+    "nuxt": "^3.17.3",
+    "reka-ui": "^2.2.1",
+    "unocss": "^66.1.2",
+    "vue": "^3.5.14",
+    "vue-router": "^4.5.1"
   },
-  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }

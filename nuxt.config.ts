@@ -6,20 +6,14 @@ import {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2024-11-01",
-  devtools: { enabled: true },
-  modules: ["@unocss/nuxt", "@nuxt/fonts", "@pinia/nuxt", "@vueuse/nuxt"],
-  css: ["@unocss/reset/tailwind.css"],
+  compatibilityDate: "2025-05-15",
+  devtools: { enabled: false },
+  modules: ["@nuxt/fonts", "@nuxt/icon", "@unocss/nuxt"],
   unocss: {
-    theme: {
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
-    },
     transformers: [
       transformerCompileClass(),
-      transformerDirectives(),
       transformerVariantGroup(),
+      transformerDirectives(),
     ],
   },
 });

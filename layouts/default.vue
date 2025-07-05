@@ -1,16 +1,17 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: "Paysha",
-  description: "your budget, your data, your way",
-});
+import "@unocss/reset/tailwind.css";
 </script>
 
 <template>
-  <slot />
+    <navigation />
+
+    <main class="<sm:(pb-20)">
+        <slot />
+    </main>
 </template>
 
 <style>
 body {
-  font-family: "Inter", sans-serif;
+    font-family: Inter;
 }
 </style>
