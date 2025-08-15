@@ -1,0 +1,10 @@
+{
+	"/": [],
+	"/books": [],
+	"/books/[slug]": [
+		"src/routes/books/[slug]/+layout.ts",
+		"src/routes/books/[slug]/+layout.server.ts",
+		"src/routes/books/[slug]/+layout.ts",
+		"src/routes/books/[slug]/+layout.server.ts"
+	]
+}
