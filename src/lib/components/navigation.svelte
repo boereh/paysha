@@ -1,11 +1,14 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { Select, Dialog, Separator } from "bits-ui";
-  import Check from "~icons/lucide/check";
+  import { Select } from "bits-ui";
+  // import Check from "~icons/lucide/check";
   import ChevronsDown from "~icons/lucide/chevrons-down";
   import ChevronsUp from "~icons/lucide/chevrons-up";
   import ChevronsUpDown from "~icons/lucide/chevrons-up-down";
   import RussianRuble from "~icons/lucide/receipt-russian-ruble";
+  import Settings from "~icons/lucide/settings";
+  import Button from "./ui/button.svelte";
 </script>
 
 <nav class={["bg-white p-3 border-b border-neutral-200 grid gap-3"]}>
@@ -21,25 +24,26 @@
     {/if}
   </div>
 
-  <nav class="bg-white border-b border-neutral-200 px-3">
-    <div class="mx-auto max-w-7xl flex">Overview</div>
-  </nav>
+  <div class="flex">
+    <div class="flex-grow flex">
+      <div class="flex">
+        <button> Overview </button>
+      </div>
+    </div>
+
+    <Button variant="soft">
+      <Settings />
+    </Button>
+  </div>
 </nav>
 
 {#snippet SelectBook()}
-  <Select.Root
-    type="single"
-    onValueChange={(v) => ($selected_book = $books.find(({ id }) => id === v))}
-    items={$books.map((book) => ({
-      label: book.title,
-      value: book.id,
-    }))}
-  >
+  <Select.Root type="single" onValueChange={(v) => goto(`/books/${v}`)}>
     <Select.Trigger
       class="h-9 rounded-9px border-border-input bg-background data-placeholder:text-foreground-alt/50 inline-flex w-[296px] touch-none select-none items-center border px-[11px] text-sm transition-colors"
       aria-label="Select a theme"
     >
-      {$selected_book}
+      <!-- {$selected_book} -->
 
       <ChevronsUpDown class="text-muted-foreground ml-auto size-6 text-red" />
     </Select.Trigger>
@@ -62,7 +66,7 @@
         </Select.ScrollUpButton>
 
         <Select.Viewport>
-          {#each $books as theme (theme.id)}
+          <!-- {#each $books as theme (theme.id)}
             <Select.Item
               class="rounded-button data-highlighted:bg-muted outline-hidden data-disabled:opacity-50 flex h-10 w-full select-none items-center py-3 pl-5 pr-1.5 text-sm capitalize"
               value={theme.id}
@@ -78,7 +82,7 @@
                 {/if}
               {/snippet}
             </Select.Item>
-          {/each}
+          {/each} -->
 
           <Select.Item
             class="rounded-button data-highlighted:bg-muted outline-hidden data-disabled:opacity-50 flex h-10 w-full select-none items-center py-3 pl-5 pr-1.5 text-sm capitalize"
