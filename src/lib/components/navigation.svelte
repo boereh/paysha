@@ -35,7 +35,7 @@
   ]}
 >
   <div class="flex gap-3 items-center">
-    <a href="/">
+    <a href="/" aria-label="Home">
       <RussianRuble class="h-8 w-8" />
     </a>
 
@@ -86,6 +86,7 @@
   {#if book_id}
     <div class="flex flex-col gap-1">
       <a
+        aria-label="{book?.title}'s page"
         href="/books/{book_id}"
         class={[
           "h-9 px-3 rounded-md transition-all flex gap-3 items-center",
@@ -125,7 +126,11 @@
         : "hover:(bg-neutral-200)",
     ]}
   >
-    <a href="/books/{book_id}/{page.pid || ''}" class={["px-3 w-full"]}>
+    <a
+      aria-label={`Navigate to ${page.label}`}
+      href="/books/{book_id}/{page.pid || ''}"
+      class={["px-3 w-full"]}
+    >
       {page.label}
     </a>
 
