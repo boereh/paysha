@@ -61,6 +61,7 @@
       </div>
 
       <button
+        aria-label="Settings page"
         class={[
           "h-9 w-9 grid place-items-center transition rounded-md",
           "hover:bg-neutral-200",
@@ -135,6 +136,7 @@
     </a>
 
     <button
+      aria-label="Delete page"
       class={[
         "absolute right-1.5 w-6 h-6 place-items-center z-1 rounded-md transition hover:(bg-neutral-300)",
         book_page === page.pid ? "grid" : "hidden group-hover:(grid)",
@@ -173,7 +175,7 @@
         <div class="truncate">
           {page.data?.book?.title}
         </div>
-        <div class="text-xs text-neutral-500 uppercase">
+        <div class="text-xs text-neutral-600 uppercase">
           {page.data?.book?.local ? "Local" : "Cloud"} Stored
         </div>
       </span>
