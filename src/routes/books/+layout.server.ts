@@ -4,8 +4,10 @@ export async function load({ parent, locals }) {
   await parent();
 
   if (locals.user) {
-    return {};
+    // Get the book from the database
+
+    return { books: [] };
   }
 
-  return { book: SAMPLE_BOOK };
+  return { books: [SAMPLE_BOOK] };
 }

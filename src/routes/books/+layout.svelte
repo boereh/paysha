@@ -11,9 +11,11 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<Navigation />
+<div class="md:(flex)">
+  <Navigation />
 
-{@render children?.()}
+  {@render children?.()}
+</div>
 
 <style>
   :global(body) {

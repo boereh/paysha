@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { type Book } from "$lib/stores/books.js";
+import { type Book } from "$lib/types";
 import { values, createStore } from "idb-keyval";
 
 export async function load({ data }) {

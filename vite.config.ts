@@ -15,28 +15,22 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     unocss({
+      theme: {
+        fontSize: {
+          xxs: {
+            fontSize: "0.625rem",
+            lineHeight: "1rem",
+          },
+        },
+      },
       presets: [
         presetWind3(),
         presetTypography(),
         presetWebFonts({
           fonts: {
-            sans: ["Inter"],
+            sans: ["Inter:400,500,600,700"],
           },
         }),
-        {
-          name: "neu",
-          enforce: "pre",
-          rules: [
-            [
-              /^neushadow-(\d+)$/,
-              ([, d]) => ({
-                "box-shadow": [...Array(Number.parseInt(d))]
-                  .map((v, i) => `${i + 1}px ${i + 1}px 0px currentColor`)
-                  .join(","),
-              }),
-            ],
-          ],
-        },
       ],
       transformers: [
         transformerCompileClass(),

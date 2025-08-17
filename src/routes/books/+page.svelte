@@ -1,18 +1,20 @@
 <script lang="ts">
   import Dialog from "$lib/components/ui/dialog.svelte";
-  import { books } from "$lib/stores/books";
   import Book from "~icons/lucide/book-open-text";
+  import { page } from "$app/state";
 
   let create_book = $state(false);
+
+  const no_books = $derived(page.data?.books?.length < 1);
 </script>
 
 <div
   class={[
     "h-[calc(100vh-3.5rem-1px)]",
-    $books.length < 1 ? "flex flex-col items-center justify-center gap-3" : "",
+    no_books ? "flex flex-col items-center justify-center gap-3" : "",
   ]}
 >
-  {#if $books.length < 1}
+  {#if no_books}
     <Book class="size-24" />
 
     <p class="text-lg font-bold">Welcome to Paysha</p>
