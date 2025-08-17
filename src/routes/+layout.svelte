@@ -8,6 +8,8 @@
 
 <svelte:head>
   <link rel="icon" href={favicon} />
+  <title>Paysha</title>
+  <meta name="description" content="a nice, open-looking spreadsheet" />
 </svelte:head>
 
 {@render children?.()}
