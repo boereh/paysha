@@ -4,8 +4,6 @@
   let { children } = $props();
 </script>
 
-<div class="md:(flex)">
-  <Navigation />
+<Navigation />
 
-  {@render children?.()}
-</div>
+{@render children?.()}

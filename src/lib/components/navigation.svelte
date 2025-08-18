@@ -30,8 +30,8 @@
 <!-- Mobile navigation -->
 <nav
   class={[
-    "md:hidden bg-neutral-100 p-3 border-b border-neutral-200 grid gap-3",
-    page.data.book ? "" : "",
+    "hidden bg-neutral-100 p-3  border-b border-neutral-200 grid gap-3",
+    page.data.book ? "pb-0" : "",
   ]}
 >
   <div class="flex gap-3 items-center">
@@ -74,24 +74,29 @@
 </nav>
 
 <!-- Desktop navigation -->
+
 <nav
   class={[
-    "<md:hidden bg-light-200 p-3 border-r h-vh border-neutral-200 space-y-6 w-xs",
-    page.data.book ? "" : "",
+    "top-0 bg-white p-3 border-r border-neutral-200 space-y-6 w-full",
+    page.data.book ? "pb-0" : "sticky",
   ]}
 >
   {#if book_id}
     {@render SelectBook()}
   {/if}
+</nav>
 
-  {#if book_id}
-    <div class="flex flex-col gap-1">
+{#if book_id}
+  <nav class="sticky bg-white top-0 border-b p-3">
+    <div class="flex gap-1 p-1 items-center bg-neutral-100 rounded-lg">
       <a
         aria-label="{book?.title}'s page"
         href="/books/{book_id}"
         class={[
-          "h-9 px-3 rounded-md transition-all flex gap-3 items-center",
-          book_page === 0 ? "bg-neutral-200" : "hover:(bg-neutral-200)",
+          "h-9 px-3 shadow-lg border rounded-md transition-all flex gap-1.5 items-center",
+          book_page === 0
+            ? "bg-white shadow-black/5 text-blue-700"
+            : "hover:(text-blue-700) shadow-transparent border-transparent",
         ]}
       >
         <LayoutDashboard />
@@ -99,38 +104,30 @@
         Overview
       </a>
 
-      <Collapsible.Root open={true}>
-        <Collapsible.Trigger
-          class="flex gap-3 px-3 w-full h-9 items-center rounded-md hover:(bg-neutral-200)"
-        >
-          <Layers />
+      <span class="w-px h-6 bg-neutral-200"></span>
 
-          Pages
-        </Collapsible.Trigger>
-        <Collapsible.Content class="pl-8 space-y-1 py-1">
-          {#each book_pages as page (page.pid)}
-            {@render NavigationButton(page)}
-          {/each}
-        </Collapsible.Content>
-      </Collapsible.Root>
+      {#each book_pages as page (page.pid)}
+        {@render NavigationButton(page)}
+      {/each}
     </div>
-  {/if}
-</nav>
+  </nav>
+{/if}
 
 {#snippet NavigationButton(page: (typeof book_pages)[0])}
   <div
     class={[
-      "h-9 rounded-md transition-all flex items-center justify-between relative group",
+      "h-9 border-b rounded-md transition-all flex items-center justify-between relative group",
       "",
       book_page === page.pid
-        ? "bg-neutral-200 text-black"
-        : "hover:(bg-neutral-200)",
+        ? "text-blue-700 bg-white border-neutral-200"
+        : "hover:(text-blue-700) border-transparent shadow-transparent",
     ]}
-  >
+        
+    >
     <a
       aria-label={`Navigate to ${page.label}`}
       href="/books/{book_id}/{page.pid || ''}"
-      class={["px-3 w-full"]}
+      class={["h-full px-3 w-full flex items-center"]}
     >
       {page.label}
     </a>
@@ -138,8 +135,8 @@
     <button
       aria-label="Delete page"
       class={[
-        "absolute right-1.5 w-6 h-6 place-items-center z-1 rounded-md transition hover:(bg-neutral-300)",
-        book_page === page.pid ? "grid" : "hidden group-hover:(grid)",
+        "w-6 h-6 place-items-center z-1 rounded-md transition hover:(bg-neutral-200)",
+        book_page === page.pid ? "" : "hidden",
       ]}
       onclick={() => console.log("click")}
     >
