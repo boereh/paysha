@@ -10,6 +10,7 @@
   import X from "~icons/lucide/x";
   import Plus from "~icons/lucide/plus";
   import Layers from "~icons/lucide/layers";
+  import Ellipsis from "~icons/lucide/ellipsis-vertical";
   import LayoutDashboard from "~icons/lucide/layout-dashboard";
   import type { Book } from "$lib/types";
 
@@ -77,7 +78,7 @@
 
 <nav
   class={[
-    "top-0 bg-white p-3 border-r border-neutral-200 space-y-6 w-full",
+    "top-0 bg-neutral-100 p-3 border-r border-neutral-200 space-y-6 w-full",
     page.data.book ? "pb-0" : "sticky",
   ]}
 >
@@ -87,13 +88,13 @@
 </nav>
 
 {#if book_id}
-  <nav class="sticky bg-white top-0 border-b p-3">
-    <div class="flex gap-1 p-1 items-center bg-neutral-100 rounded-lg">
+  <nav class="sticky bg-neutral-100 top-0 border-b p-1">
+    <div class="flex p-1 items-center bg-neutral-100 rounded-lg">
       <a
         aria-label="{book?.title}'s page"
         href="/books/{book_id}"
         class={[
-          "h-9 px-3 shadow-lg border rounded-md transition-all flex gap-1.5 items-center",
+          "h-9 px-6 border rounded-md transition-all flex gap-1.5 items-center",
           book_page === 0
             ? "bg-white shadow-black/5 text-blue-700"
             : "hover:(text-blue-700) shadow-transparent border-transparent",
@@ -104,7 +105,12 @@
         Overview
       </a>
 
-      <span class="w-px h-6 bg-neutral-200"></span>
+      <span
+        class={[
+          "h-3 w-px transition",
+          [0, 1].includes(book_page) ? "" : "bg-neutral-200",
+        ]}
+      ></span>
 
       {#each book_pages as page (page.pid)}
         {@render NavigationButton(page)}
@@ -113,36 +119,40 @@
   </nav>
 {/if}
 
-{#snippet NavigationButton(page: (typeof book_pages)[0])}
-  <div
+{#snippet NavigationButton(page: (typeof book_pages)[0], last?: boolean)}
+  {@const after_page = book_page === page.pid + 1}
+  {@const is_page = book_page === page.pid}
+  <a
+    aria-label={`Navigate to ${page.label}`}
+    href="/books/{book_id}/{page.pid || ''}"
     class={[
-      "h-9 border-b rounded-md transition-all flex items-center justify-between relative group",
+      "h-9 px-6 border rounded-md transition-all flex items-center justify-between relative group",
       "",
-      book_page === page.pid
+      is_page
         ? "text-blue-700 bg-white border-neutral-200"
         : "hover:(text-blue-700) border-transparent shadow-transparent",
     ]}
-        
-    >
-    <a
-      aria-label={`Navigate to ${page.label}`}
-      href="/books/{book_id}/{page.pid || ''}"
-      class={["h-full px-3 w-full flex items-center"]}
-    >
-      {page.label}
-    </a>
-
-    <button
+  >
+    {page.label}
+  </a>
+  <!-- <button
       aria-label="Delete page"
       class={[
-        "w-6 h-6 place-items-center z-1 rounded-md transition hover:(bg-neutral-200)",
-        book_page === page.pid ? "" : "hidden",
+        "absolute w-6 h-6 right-1.5 grid place-items-center z-1 rounded-md transition hover:(bg-neutral-200)",
       ]}
       onclick={() => console.log("click")}
     >
-      <X />
-    </button>
-  </div>
+      <Ellipsis />
+    </button> -->
+
+  {#if !last}
+    <span
+      class={[
+        "h-3 w-px transition",
+        after_page || is_page ? "" : "bg-neutral-200",
+      ]}
+    ></span>
+  {/if}
 {/snippet}
 
 {#snippet SelectBook()}
