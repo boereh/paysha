@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "pnpm db:push && nuxt build",
+    "db:build": "pnpm db:push && nuxt build",
+    "build": " nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

@@ -7,7 +7,7 @@ import * as AUTH_SCHEMAS from "./schemas-auth";
 
 // import { createClient } from "@supabase/supabase-js";
 
-// const runtime_config = useRuntimeConfig();
+const runtime_config = useRuntimeConfig();
 
 // export const supabase_server = createClient(
 //   runtime_config.public.supabase_url,
@@ -15,19 +15,19 @@ import * as AUTH_SCHEMAS from "./schemas-auth";
 // );
 
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET,
+  secret: runtime_config.betterAuthSecret,
   database: drizzleAdapter(database, {
     provider: "sqlite",
     schema: { ...SCHEMAS, ...AUTH_SCHEMAS },
   }),
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: runtime_config.googleClientId,
+      clientSecret: runtime_config.googleClientSecret,
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: runtime_config.githubClientId,
+      clientSecret: runtime_config.githubClientSecret,
     },
   },
   plugins: [polar_plugin()],

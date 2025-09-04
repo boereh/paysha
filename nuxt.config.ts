@@ -32,20 +32,22 @@ export default defineNuxtConfig({
       transformerVariantGroup(),
     ],
   },
-  // runtimeConfig: {
-  //   turso_database_url: "",
-  //   turso_auth_token: "",
-  //   better_auth_secret: "",
-  //   github_client_id: "",
-  //   github_client_secret: "",
-  //   google_client_id: "",
-  //   google_client_secret: "",
-  //   supabase_service_key: "",
+  runtimeConfig: {
+    tursoDatabaseUrl: "",
+    tursoAuthToken: "",
 
-  //   public: {
-  //     better_auth_url: "",
-  //     supabase_url: "",
-  //     supabase_key: "",
-  //   },
-  // },
+    betterAuthSecret: "",
+
+    githubClientId: "",
+    githubClientSecret: "",
+    googleClientId: "",
+    googleClientSecret: "",
+
+    polarAccessToken: "",
+    polarWebhookSecret: "",
+
+    public: {
+      betterAuthUrl: "",
+    },
+  },
 });
