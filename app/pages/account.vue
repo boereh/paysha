@@ -18,6 +18,16 @@ async function updateName() {
         name: new_name.value,
     });
 }
+
+// useHead({
+//     script: [
+//         {
+//             src: "https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.1/dist/embed.global.js",
+//             defer: true,
+//             "data-auto-init": true,
+//         },
+//     ],
+// });
 </script>
 
 <template>
@@ -105,12 +115,18 @@ async function updateName() {
                 </table>
             </div>
 
-            <div class="bg-neutral-100 p-4 rounded-xl col-span-2">
+            <div class="bg-neutral-100 p-4 rounded-xl col-span-2 row-span-2">
                 <h1 class="text-xl font-medium pb-4">Plan</h1>
+                <!--
+                <a
+                    href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_BUZauPo5YvADWuoxieCUxPpMnVXpr5hHyxWpX0aWLzG/redirect"
+                    data-polar-checkout
+                    data-polar-checkout-theme="dark"
+                >
+                    Purchase
+                </a> -->
             </div>
-            <div class="bg-neutral-100 p-4 rounded-xl col-span-3">
-                <h1 class="text-xl font-medium pb-4">Billing</h1>
-            </div>
+
             <div class="bg-neutral-100 p-4 rounded-xl col-span-3">
                 <h1 class="text-xl font-medium pb-4">Danger Zone</h1>
                 <div>
