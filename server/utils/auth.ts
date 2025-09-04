@@ -15,18 +15,18 @@ import * as AUTH_SCHEMAS from "./schemas-auth";
 // );
 
 export const auth = betterAuth({
-  secret: process.env.NUXT_BETTER_AUTH_SECRET,
+  secret: process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(database, {
     provider: "sqlite",
     schema: { ...SCHEMAS, ...AUTH_SCHEMAS },
   }),
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },

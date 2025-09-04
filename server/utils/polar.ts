@@ -1,8 +1,10 @@
+import {} from "@polar-sh/sdk/webhooks";
 import { Polar } from "@polar-sh/sdk";
 import { polar, checkout, webhooks } from "@polar-sh/better-auth";
 
 export const polar_client = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
+  server: process.env.NODE_ENV === "development" ? "sandbox" : "production",
 });
 
 export function polar_plugin() {
