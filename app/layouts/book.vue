@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { get, set, createStore } from "idb-keyval";
+import { values } from "idb-keyval";
 
 const TABS = [
     { to: "", icon: "solar:widget-6-linear", label: "Overview" },
@@ -32,6 +32,12 @@ if (!isBrowser()) {
 onMounted(async () => {
     if (current_book.value) return;
 
+    const local_books = await values(useBookStore());
+
+    console.log(local_books);
+
+    books.value.push(...local_books);
+
     // TODO: Load from local storage
 
     if (!current_book.value) router.push("/books");
@@ -42,9 +48,11 @@ useHead({
     link: [
         {
             rel: "icon",
-            type: "image/x-icon",
+            type: "image/icon",
             href: computed(() => {
-                return `https://api.dicebear.com/9.x/shapes/svg?seed=${current_book.value?.title}`;
+                if (!current_book.value) return "/favicon.jpeg";
+
+                return `https://api.dicebear.com/9.x/shapes/svg?seed=${current_book.value.id}`;
             }),
         },
     ],
@@ -52,6 +60,8 @@ useHead({
 </script>
 
 <template>
+    <Body class="font-sans" />
+
     <nav
         class="sticky top-0 p-4 select-none relative flex justify-between items-center h-22"
     >

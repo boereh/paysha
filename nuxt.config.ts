@@ -1,5 +1,6 @@
 import {
   presetWind3,
+  presetWebFonts,
   transformerCompileClass,
   transformerDirectives,
   transformerVariantGroup,
@@ -8,6 +9,7 @@ import {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
+  devtools: { enabled: false },
   modules: [
     "@unocss/nuxt",
     "unplugin-icons/nuxt",
@@ -16,7 +18,14 @@ export default defineNuxtConfig({
   ],
   css: ["@unocss/reset/tailwind.css"],
   unocss: {
-    presets: [presetWind3()],
+    presets: [
+      presetWind3(),
+      presetWebFonts({
+        fonts: {
+          sans: "Poppins:400,500,600",
+        },
+      }),
+    ],
     transformers: [
       transformerCompileClass(),
       transformerDirectives(),

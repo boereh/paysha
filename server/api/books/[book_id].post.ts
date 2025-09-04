@@ -1,17 +1,21 @@
 import { nanoid } from "nanoid";
 import { type Book } from "~~/app/composables/books";
 import { lastCronDate } from "~~/app/composables/utils";
+import { auth } from "~~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
   const book_id = getRouterParam(event, "book_id");
+  const session = await auth.api.getSession(event);
 
-  if (!book_id) {
+  if (!session)
+    throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+
+  if (!book_id)
     throw createError({ statusCode: 400, statusMessage: "Missing book_id" });
-  }
 
   if (book_id === "what") return SAMPLE_BOOK;
 
-  return {} as Book;
+  return;
 });
 
 export const SAMPLE_BOOK: Book = {

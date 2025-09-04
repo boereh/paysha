@@ -52,6 +52,7 @@ export const BOOK_SCHEMA = object({
 export async function createBook(opts?: { title?: string }) {
   const session = await auth_client.getSession();
   const store = useBookStore();
+  const router = useRouter();
 
   const id = nanoid();
 
@@ -70,7 +71,7 @@ export async function createBook(opts?: { title?: string }) {
       store,
     );
 
-    return id;
+    return router.push(`/books/${id}`);
   }
 
   // TODO: create a new cloud book

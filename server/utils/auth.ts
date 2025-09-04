@@ -1,6 +1,10 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { database } from "./database";
+import { polar_plugin } from "./polar";
+import * as SCHEMAS from "./schemas";
+import * as AUTH_SCHEMAS from "./schemas-auth";
+
 // import { createClient } from "@supabase/supabase-js";
 
 // const runtime_config = useRuntimeConfig();
@@ -14,6 +18,7 @@ export const auth = betterAuth({
   secret: process.env.NUXT_BETTER_AUTH_SECRET,
   database: drizzleAdapter(database, {
     provider: "sqlite",
+    schema: { ...SCHEMAS, ...AUTH_SCHEMAS },
   }),
   socialProviders: {
     google: {
@@ -25,4 +30,5 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },
+  plugins: [polar_plugin()],
 });
