@@ -10,12 +10,7 @@ import {
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
-  modules: [
-    "@unocss/nuxt",
-    "unplugin-icons/nuxt",
-    "reka-ui/nuxt",
-    "@nuxt/icon",
-  ],
+  modules: ["@unocss/nuxt", "reka-ui/nuxt", "@nuxt/icon"],
   css: ["@unocss/reset/tailwind.css"],
   unocss: {
     presets: [
