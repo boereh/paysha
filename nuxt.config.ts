@@ -41,6 +41,9 @@ export default defineNuxtConfig({
     polarAccessToken: "",
     polarWebhookSecret: "",
 
+    dodoSecret: "",
+    dodoWebhookSecret: "",
+
     public: {
       betterAuthUrl: "",
     },
