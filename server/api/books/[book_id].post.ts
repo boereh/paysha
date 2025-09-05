@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { type Book } from "~~/app/composables/books";
-import { lastCronDate } from "~~/app/composables/utils";
+import { takeCronDate } from "~~/app/composables/utils";
 import { auth } from "~~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
@@ -30,7 +30,7 @@ export const SAMPLE_BOOK: Book = {
       tags: [],
       wallet: "work",
       label: "DIR DEP from Amce, Inc.",
-      date: lastCronDate("0 2 * * 4") || new Date(),
+      date: takeCronDate("0 2 * * 4", 1)[0].toDate() || new Date(),
     },
     {
       id: nanoid(),
@@ -38,7 +38,7 @@ export const SAMPLE_BOOK: Book = {
       tags: [],
       wallet: "bills",
       label: "Rent",
-      date: lastCronDate("0 0 1 * *") || new Date(),
+      date: takeCronDate("0 0 1 * *", -1)[0].toDate() || new Date(),
     },
   ],
   recurring: [
