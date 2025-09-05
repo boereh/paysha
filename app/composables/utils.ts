@@ -1,9 +1,6 @@
-import { CronJob } from "cron";
+import { CronExpressionParser } from "cron-parser";
 
 export const isBrowser = () => typeof window !== "undefined";
-export function lastCronDate(exp: string) {
-  return new CronJob(exp, () => {}).lastDate();
-}
-export function nextCronDate(exp: string, count?: number) {
-  return new CronJob(exp, () => {}).nextDates(count);
+export function takeCronDate(exp: string, count?: number) {
+  return CronExpressionParser.parse(exp).take(count || 1);
 }

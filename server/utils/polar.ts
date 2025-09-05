@@ -24,6 +24,12 @@ export function polar_plugin() {
         successUrl: process.env.POLAR_SUCCESS_URL,
         authenticatedUsersOnly: true,
       }),
+      webhooks({
+        secret: runtime_config.polarWebhookSecret,
+        async onPayload(payload) {
+          console.log("polar webhook:", payload);
+        },
+      }),
     ],
   });
 }

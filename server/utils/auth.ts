@@ -5,14 +5,7 @@ import { polar_plugin } from "./polar";
 import * as SCHEMAS from "./schemas";
 import * as AUTH_SCHEMAS from "./schemas-auth";
 
-// import { createClient } from "@supabase/supabase-js";
-
 const runtime_config = useRuntimeConfig();
-
-// export const supabase_server = createClient(
-//   runtime_config.public.supabase_url,
-//   runtime_config.supabase_service_key,
-// );
 
 export const auth = betterAuth({
   secret: runtime_config.betterAuthSecret,
