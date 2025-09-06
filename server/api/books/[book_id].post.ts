@@ -1,17 +1,15 @@
 import { nanoid } from "nanoid";
 import { type Book } from "~~/app/composables/books";
-import { lastCronDate } from "~~/app/composables/utils";
+import { takeCronDate } from "~~/app/composables/utils";
 import { auth } from "~~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
   const book_id = getRouterParam(event, "book_id");
-  const session = await auth.api.getSession(event);
-
-  if (!session)
-    throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
-
   if (!book_id)
     throw createError({ statusCode: 400, statusMessage: "Missing book_id" });
+
+  const session = await auth.api.getSession(event);
+  if (!session) return;
 
   if (book_id === "what") return SAMPLE_BOOK;
 
@@ -30,7 +28,7 @@ export const SAMPLE_BOOK: Book = {
       tags: [],
       wallet: "work",
       label: "DIR DEP from Amce, Inc.",
-      date: lastCronDate("0 2 * * 4") || new Date(),
+      date: takeCronDate("0 2 * * 4", 1)[0].toDate() || new Date(),
     },
     {
       id: nanoid(),
@@ -38,7 +36,7 @@ export const SAMPLE_BOOK: Book = {
       tags: [],
       wallet: "bills",
       label: "Rent",
-      date: lastCronDate("0 0 1 * *") || new Date(),
+      date: takeCronDate("0 0 1 * *", -1)[0].toDate() || new Date(),
     },
   ],
   recurring: [

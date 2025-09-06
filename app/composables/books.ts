@@ -44,6 +44,7 @@ export const BOOK_SCHEMA = object({
   title: string(),
   author: string(),
   coauthors: array(string()),
+  created: date(),
   transactions: array(TRANSACTION_SCHEMA),
   recurring: array(RECURRING_SCHEMA),
   local: optional(boolean()),
@@ -64,6 +65,7 @@ export async function createBook(opts?: { title?: string }) {
         title: opts?.title || "Untitled book",
         author: "",
         coauthors: [],
+        created: new Date(),
         transactions: [],
         recurring: [],
         local: true,
@@ -74,5 +76,29 @@ export async function createBook(opts?: { title?: string }) {
     return router.push(`/books/${id}`);
   }
 
-  // TODO: create a new cloud book
+  const response = await fetch("/api/books/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id,
+      title: opts?.title || "Untitled book",
+      author: "",
+      coauthors: [],
+      created: new Date(),
+      transactions: [],
+      recurring: [],
+      local: true,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create book: ${response.statusText}`);
+  }
+
+  const book = await response.json();
+  await set(id, book, store);
+
+  return router.push(`/books/${id}`);
 }
