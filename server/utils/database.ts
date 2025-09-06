@@ -1,11 +1,9 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 
-const runtime_config = useRuntimeConfig();
-
 export const turso_client = createClient({
-  url: runtime_config.tursoDatabaseUrl,
-  authToken: runtime_config.tursoAuthToken,
+  url: process.env.NUXT_TURSO_DATABASE_URL!,
+  authToken: process.env.NUXT_TURSO_AUTH_TOKEN!,
 });
 
 export const database = drizzle({
