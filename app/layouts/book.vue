@@ -15,10 +15,10 @@ const TABS = [
 const route = useRoute();
 const router = useRouter();
 const books = useBooks();
-const book_id = computed(() => route.params.book_id);
+const book_id = computed(() => route.params.book_id as string);
 const current_book = useCurrentBook();
 
-if (!isBrowser()) {
+if (!isBrowser() && !books.value.find((b) => b.id === book_id.value)) {
     const book = await $fetch<Book>(`/api/books/${book_id.value}`, {
         method: "POST",
     });
@@ -30,17 +30,22 @@ if (!isBrowser()) {
 }
 
 onMounted(async () => {
+    const book = books.value.find((b) => b.id === book_id.value);
+
+    if (book) current_book.value = book;
     if (current_book.value) return;
 
-    const local_books = await values(useBookStore());
+    const stored_books = await values<Book>(useBookStore());
 
-    console.log(local_books);
+    if (stored_books.length === 0) return router.push("/books");
 
-    books.value.push(...local_books);
+    books.value.push(...stored_books);
 
-    // TODO: Load from local storage
+    const book_stored = stored_books.find((b) => b.id === book_id.value);
 
-    if (!current_book.value) router.push("/books");
+    if (!book_stored) return router.push("/books");
+
+    current_book.value = book_stored;
 });
 
 useHead({
@@ -60,7 +65,9 @@ useHead({
 </script>
 
 <template>
-    <Body class="font-sans" />
+    <Body
+        class="font-sans <sm:(mb-20) sm:(mt-10) bg-whiskey-50 text-whiskey-dark-700 dark:(bg-whiskey-dark-800 text-whiskey-300)"
+    />
 
     <nav
         class="sticky top-0 p-4 select-none relative flex justify-between items-center h-22"
@@ -68,41 +75,36 @@ useHead({
         <BookSelect />
 
         <div
-            class="absolute left-1/2 -translate-x-1/2 bg-neutral-100 rounded-xl p-2"
+            class="flex items-center gap-2 bg-whiskey-100 h-full p-2 rounded-xl dark:bg-whiskey-dark-800"
         >
-            <TabsRoot
-                :default-value="route.path.split('/')[3] || ''"
-                :model-value="route.path.split('/')[3] || ''"
-                @update:model-value="
-                    (v) => router.push(`/books/${book_id}/${v}`)
-                "
-            >
-                <TabsList class="flex items-center gap-2">
-                    <TabsTrigger
-                        v-for="tab of TABS"
-                        :key="tab.to"
-                        :value="tab.to"
-                        :to="`/books/${book_id}/${tab.to}`"
-                        class="flex items-center px-4 h-10 gap-1 transition rounded-lg data-[state=inactive]:hover:(bg-neutral-200) z-1"
-                    >
-                        <Icon :name="tab.icon" class="size-6" />
-
-                        <span>
-                            {{ tab.label }}
-                        </span>
-                    </TabsTrigger>
-
-                    <TabsIndicator
-                        class="absolute left-0 bottom-1/2 w-[--reka-tabs-indicator-size] translate-y-1/2 translate-x-[--reka-tabs-indicator-position] transition-[width,transform] duration-300"
-                    >
-                        <div
-                            class="bg-white shadow-md w-full h-10 rounded-lg"
-                        />
-                    </TabsIndicator>
-                </TabsList>
-            </TabsRoot>
+            what
         </div>
     </nav>
+
+    <Tabs
+        :tabs="[
+            {
+                to: `/books/${book_id}`,
+                icon: 'solar:widget-6-linear',
+                label: 'Overview',
+            },
+            {
+                to: `/books/${book_id}/transactions`,
+                icon: 'solar:bill-list-linear',
+                label: 'Transactions',
+            },
+            {
+                to: `/books/${book_id}/recurrings`,
+                icon: 'solar:repeat-linear',
+                label: 'Recurrings',
+            },
+            {
+                to: `/books/${book_id}/settings`,
+                icon: 'solar:settings-linear',
+                label: 'Settings',
+            },
+        ]"
+    />
 
     <slot />
 </template>

@@ -30,7 +30,7 @@ const socials = {
                 <button
                     v-for="(icon, name) in socials"
                     :key="name"
-                    class="flex items-center justify-center h-10 capitalize px-4 gap-2 rounded-md transition bg-neutral-100 hover:bg-neutral-200"
+                    class="flex items-center justify-center h-10 capitalize px-4 gap-2 rounded-md transition bg-whiskey-100 border border-whiskey-100 hover:(bg-whiskey-200 border-whiskey-300)"
                     @click="
                         auth_client.signIn.social({
                             provider: name,

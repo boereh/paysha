@@ -5,13 +5,11 @@ import { auth } from "~~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
   const book_id = getRouterParam(event, "book_id");
-  const session = await auth.api.getSession(event);
-
-  if (!session)
-    throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
-
   if (!book_id)
     throw createError({ statusCode: 400, statusMessage: "Missing book_id" });
+
+  const session = await auth.api.getSession(event);
+  if (!session) return;
 
   if (book_id === "what") return SAMPLE_BOOK;
 

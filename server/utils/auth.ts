@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { database } from "./database";
 // import { polar_plugin } from "./polar";
-import { dodo } from "./dodopayments";
+// import { dodo } from "./dodopayments";
 import * as SCHEMAS from "./schemas";
 import * as AUTH_SCHEMAS from "./schemas-auth";
 
@@ -24,5 +24,5 @@ export const auth = betterAuth({
       clientSecret: runtime_config.githubClientSecret,
     },
   },
-  plugins: [dodo],
+  plugins: [],
 });
