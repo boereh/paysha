@@ -54,51 +54,38 @@ export async function createBook(opts?: { title?: string }) {
   const session = await auth_client.getSession();
   const store = useBookStore();
   const router = useRouter();
+  const books = useBooks();
 
-  const id = nanoid();
+  const book: Book = {
+    id: nanoid(),
+    title: opts?.title || "Untitled book",
+    author: "",
+    coauthors: [],
+    created: new Date(),
+    transactions: [],
+    recurring: [],
+  };
 
-  if (!session.data?.user) {
-    await set(
-      id,
-      {
-        id,
-        title: opts?.title || "Untitled book",
-        author: "",
-        coauthors: [],
-        created: new Date(),
-        transactions: [],
-        recurring: [],
-        local: true,
-      },
-      store,
-    );
+  if (!session.data) {
+    book.local = true;
 
-    return router.push(`/books/${id}`);
+    await set(book.id, book, store);
+
+    return router.push(`/books/${book.id}`);
   }
 
-  const response = await fetch("/api/books/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      id,
-      title: opts?.title || "Untitled book",
-      author: "",
-      coauthors: [],
-      created: new Date(),
-      transactions: [],
-      recurring: [],
-      local: true,
-    }),
+  const id = await $fetch<string>(`/api/books`, {
+    method: "PUT",
+    body: book,
+  }).catch((error) => {
+    console.error(`Failed to create book: ${error.message}`);
+
+    return "";
   });
 
-  if (!response.ok) {
-    throw new Error(`Failed to create book: ${response.statusText}`);
-  }
+  book.id = id;
 
-  const book = await response.json();
-  await set(id, book, store);
+  books.value.push(book);
 
   return router.push(`/books/${id}`);
 }

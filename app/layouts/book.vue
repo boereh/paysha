@@ -17,6 +17,7 @@ const router = useRouter();
 const books = useBooks();
 const book_id = computed(() => route.params.book_id as string);
 const current_book = useCurrentBook();
+const session = auth_client.useSession();
 
 if (!isBrowser() && !books.value.find((b) => b.id === book_id.value)) {
     const book = await $fetch<Book>(`/api/books/${book_id.value}`, {
@@ -53,9 +54,9 @@ useHead({
     link: [
         {
             rel: "icon",
-            type: "image/icon",
+            type: "image/ico",
             href: computed(() => {
-                if (!current_book.value) return "/favicon.jpeg";
+                if (!current_book.value) return "/favicon.ico";
 
                 return `https://api.dicebear.com/9.x/shapes/svg?seed=${current_book.value.id}`;
             }),
@@ -66,18 +67,45 @@ useHead({
 
 <template>
     <Body
-        class="font-sans <sm:(mb-20) sm:(mt-10) bg-whiskey-50 text-whiskey-dark-700 dark:(bg-whiskey-dark-800 text-whiskey-300)"
+        class="font-sans <sm:(mb-20) text-dark-900 dark:(bg-neutral-dark-800 text-neutral-300)"
     />
 
     <nav
-        class="sticky top-0 p-4 select-none relative flex justify-between items-center h-22"
+        class="sticky top-0 p-2 select-none relative flex justify-between items-center"
     >
         <BookSelect />
 
         <div
-            class="flex items-center gap-2 bg-whiskey-100 h-full p-2 rounded-xl dark:bg-whiskey-dark-800"
+            class="flex items-center gap-2 bg-neutral-100 p-2 rounded-xl dark:bg-neutral-dark-800"
         >
-            what
+            <button
+                class="h-10 w-10 grid place-items-center rounded-md hover:(bg-neutral-200)"
+            >
+                <img
+                    v-if="session?.data?.user.image"
+                    :src="session.data.user.image"
+                    alt="profile cover"
+                />
+
+                <Icon
+                    v-else
+                    name="solar:question-circle-linear"
+                    class="size-6"
+                />
+            </button>
+
+            <NuxtLink
+                to="/account"
+                class="h-10 w-10 grid place-items-center rounded-md hover:(bg-neutral-200)"
+            >
+                <img
+                    v-if="session?.data?.user.image"
+                    :src="session.data.user.image"
+                    alt="account cover"
+                />
+
+                <Icon v-else name="solar:user-circle-linear" class="size-6" />
+            </NuxtLink>
         </div>
     </nav>
 

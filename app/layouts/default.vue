@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Paysha from "~/components/paysha.vue";
+
 const route = useRoute();
 const router = useRouter();
 
@@ -7,21 +9,18 @@ useHead({
     link: [
         {
             rel: "icon",
-            type: "image/jpeg",
-            href: "/favicon.jpeg",
+            type: "image/x-icon",
+            href: "/favicon.ico",
         },
     ],
 });
 </script>
 
 <template>
-    <Body
-        class="font-sans <sm:(mb-24) sm:(mt-20) bg-whiskey-50 text-whiskey-dark-600 dark:(bg-whiskey-dark-800 text-whiskey-300)"
-    />
 
     <Tabs
         :tabs="[
-            { to: '/', icon: 'solar:home-2-linear', label: 'Paysha' },
+            { to: '/', icon: Paysha, label: 'Paysha' },
             { to: '/books', icon: 'solar:book-2-linear', label: 'Books' },
             {
                 to: '/plans',

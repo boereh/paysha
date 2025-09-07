@@ -36,7 +36,7 @@ async function updateName() {
         <div class="max-w-7xl mx-auto flex flex-col gap-4">
             <h1 class="text-xl text-medium px-4">Account details</h1>
 
-            <div class="bg-whiskey-100 p-4 rounded-xl space-y-4">
+            <div class="bg-neutral-100 p-4 rounded-xl space-y-4">
                 <div class="flex items-center gap-4 col-span-2">
                     <img
                         class="w-12 h-12 rounded-lg"
@@ -48,7 +48,7 @@ async function updateName() {
                     />
 
                     <div class="flex-grow grid whitespace-nowrap">
-                        <span class="text-sm text-whiskey-dark-700/50">
+                        <span class="text-sm text-neutral-dark-700/50">
                             Name</span
                         >
                         <span v-if="!new_name.editing">
@@ -68,7 +68,7 @@ async function updateName() {
                     </div>
 
                     <button
-                        class="border px-4 h-10 whitespace-nowrap rounded-md border-whiskey-300 hover:bg-whiskey-200 transition flex items-center gap-2"
+                        class="border px-4 h-10 whitespace-nowrap rounded-md border-neutral-300 hover:bg-neutral-200 transition flex items-center gap-2"
                         @click="
                             () => {
                                 if (new_name.editing) updateName();
@@ -88,9 +88,18 @@ async function updateName() {
                                   : "Save"
                         }}
                     </button>
+
+                    <button
+                        class="border px-4 h-10 whitespace-nowrap rounded-md border-red-300 text-red-400 hover:bg-red-100 transition flex items-center gap-2"
+                        @click="auth_client.signOut()"
+                    >
+                        <Icon name="solar:logout-2-linear" />
+
+                        Sign out
+                    </button>
                 </div>
 
-                <hr class="my-4 border-whiskey-300" />
+                <hr class="my-4 border-neutral-300" />
 
                 <table>
                     <tbody>
@@ -118,7 +127,7 @@ async function updateName() {
 
             <h1 class="text-xl px-4">Plan</h1>
 
-            <div class="bg-whiskey-100 p-4 rounded-xl col-span-2 row-span-2">
+            <div class="bg-neutral-100 p-4 rounded-xl col-span-2 row-span-2">
                 <!--
                 <a
                     href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_BUZauPo5YvADWuoxieCUxPpMnVXpr5hHyxWpX0aWLzG/redirect"
@@ -131,11 +140,11 @@ async function updateName() {
 
             <h1 class="text-xl px-4">Danger Zone</h1>
 
-            <div class="bg-whiskey-100 p-4 rounded-xl col-span-3 flex">
+            <div class="bg-neutral-100 p-4 rounded-xl col-span-3 flex">
                 <div class="flex-grow">
                     <h3>Delete my account</h3>
 
-                    <p class="text-sm text-whiskey-dark-700/50">
+                    <p class="text-sm text-neutral-dark-700/50">
                         This action is irreversible.
                     </p>
                 </div>

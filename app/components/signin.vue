@@ -16,7 +16,7 @@ const socials = {
 </script>
 
 <template>
-    <div class="p-4 h-[calc(100dvh-4.5rem)]">
+    <div class="p-4 h-[calc(100dvh-5rem)]">
         <div
             class="max-w-7xl mx-auto h-full flex flex-col items-center justify-center gap-4"
         >
@@ -30,7 +30,7 @@ const socials = {
                 <button
                     v-for="(icon, name) in socials"
                     :key="name"
-                    class="flex items-center justify-center h-10 capitalize px-4 gap-2 rounded-md transition bg-whiskey-100 border border-whiskey-100 hover:(bg-whiskey-200 border-whiskey-300)"
+                    class="flex items-center justify-center h-10 capitalize px-4 gap-2 rounded-md transition bg-neutral-100 border border-neutral-100 hover:(bg-neutral-200 border-neutral-300)"
                     @click="
                         auth_client.signIn.social({
                             provider: name,

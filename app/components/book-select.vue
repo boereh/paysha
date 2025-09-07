@@ -5,7 +5,7 @@ const router = useRouter();
 </script>
 
 <template>
-    <div class="bg-whiskey-100 h-14 px-2 rounded-lg flex items-center gap-2">
+    <div class="bg-neutral-100 h-14 px-2 rounded-lg flex items-center gap-2">
         <SelectRoot
             @update:model-value="
                 (v) => {
@@ -21,13 +21,13 @@ const router = useRouter();
         >
             <SelectTrigger
                 :class="[
-                    'flex items-center gap-2 hover:(bg-whiskey-200) px-2 w-64 h-10 rounded-md data-[state=open]:(bg-whiskey-200)',
+                    'flex items-center gap-2 hover:(bg-neutral-200) px-2 w-64 h-10 rounded-md data-[state=open]:(bg-neutral-200)',
                     !current_book && 'pl-10',
                 ]"
             >
                 <img
                     v-if="current_book"
-                    class="w-6 h-6 rounded-md border border-whiskey-300"
+                    class="w-6 h-6 rounded-md border border-neutral-300"
                     :src="`https://api.dicebear.com/9.x/shapes/svg?seed=${current_book.id}`"
                     alt="book cover"
                 />
@@ -42,10 +42,10 @@ const router = useRouter();
             <SelectPortal>
                 <SelectContent
                     position="popper"
-                    class="bg-whiskey-100 backdrop-blur-md mt-2 py-2 rounded-md border border-whiskey-300 w-[--reka-select-trigger-width]"
+                    class="bg-white mt-1 py-2 rounded-md border border-neutral-200 w-[--reka-select-trigger-width]"
                 >
                     <SelectLabel
-                        class="px-4 py-2 text-sm font-medium text-whiskey-600"
+                        class="px-4 py-2 text-sm font-medium text-neutral-600"
                     >
                         Books
                     </SelectLabel>
@@ -57,10 +57,10 @@ const router = useRouter();
                     >
                         <SelectItem
                             :value="book.id"
-                            class="px-2 flex items-center gap-2 h-10 rounded-md cursor-pointer outline-none hover:(bg-whiskey-200)"
+                            class="px-2 flex items-center gap-2 h-10 rounded-md cursor-pointer outline-none hover:(bg-neutral-200)"
                         >
                             <img
-                                class="w-6 h-6 rounded-md border border-whiskey-300"
+                                class="w-6 h-6 rounded-md border border-neutral-300"
                                 :src="`https://api.dicebear.com/9.x/shapes/svg?seed=${book.id}`"
                                 alt="book cover"
                             />
@@ -71,12 +71,12 @@ const router = useRouter();
                         </SelectItem>
                     </SelectGroup>
 
-                    <hr class="my-2 border-whiskey-300" />
+                    <hr class="my-2 border-neutral-100" />
 
                     <SelectGroup class="px-2">
                         <SelectItem
                             value="new"
-                            class="px-2 flex items-center gap-2 h-10 text-whiskey-dark-50 rounded-md cursor-pointer outline-none hover:(bg-whiskey-200)"
+                            class="px-2 flex items-center gap-2 h-10 text-neutral-500 rounded-md cursor-pointer outline-none hover:(bg-neutral-200)"
                         >
                             <Icon
                                 name="solar:pen-new-square-linear"

@@ -6,21 +6,22 @@ import { database } from "./database";
 // import { dodo } from "./dodopayments";
 import * as SCHEMAS from "./schemas";
 import * as AUTH_SCHEMAS from "./schemas-auth";
+import { getEnvVar } from ".";
 
 export const auth = betterAuth({
-  secret: process.env.NUXT_BETTER_AUTH_SECRET!,
+  secret: getEnvVar("BETTER_AUTH_SECRET"),
   database: drizzleAdapter(database, {
     provider: "sqlite",
     schema: { ...SCHEMAS, ...AUTH_SCHEMAS },
   }),
   socialProviders: {
     google: {
-      clientId: process.env.NUXT_GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
+      clientId: getEnvVar("GOOGLE_CLIENT_ID"),
+      clientSecret: getEnvVar("GOOGLE_CLIENT_SECRET"),
     },
     github: {
-      clientId: process.env.NUXT_GITHUB_CLIENT_ID!,
-      clientSecret: process.env.NUXT_GITHUB_CLIENT_SECRET,
+      clientId: getEnvVar("GITHUB_CLIENT_ID"),
+      clientSecret: getEnvVar("GITHUB_CLIENT_SECRET"),
     },
   },
   plugins: [],

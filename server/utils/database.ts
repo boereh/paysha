@@ -1,9 +1,10 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
+import { getEnvVar } from ".";
 
 export const turso_client = createClient({
-  url: process.env.NUXT_TURSO_DATABASE_URL!,
-  authToken: process.env.NUXT_TURSO_AUTH_TOKEN!,
+  url: getEnvVar("TURSO_DATABASE_URL"),
+  authToken: getEnvVar("TURSO_AUTH_TOKEN"),
 });
 
 export const database = drizzle({

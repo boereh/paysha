@@ -45,17 +45,18 @@ onUnmounted(() => {});
 </script>
 
 <template>
-    <div class="px-4">
+    <div class="px-2">
         <div
-            class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4"
+            class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
         >
             <div
                 v-for="book in books"
                 :key="book.id"
                 :to="`/books/${book.id}`"
                 :class="[
-                    'bg-whiskey-100 p-4 rounded-xl transition border-2 border-transparent group cursor-pointer relative',
-                    'hover:(bg-whiskey-200 border-whiskey-300)',
+                    'h-25 bg-neutral-100 p-4 rounded-xl transition border-2 border-transparent group cursor-pointer relative',
+                    'hover:(bg-neutral-200 border-neutral-300)',
+                    'dark:(bg-neutral-800) dark:hover:(bg-neutral-800 border-neutral-700)',
                 ]"
                 @click="() => (current_book = book)"
             >
@@ -72,23 +73,23 @@ onUnmounted(() => {});
                                 {{ book.title }}
                             </h1>
 
-                            <p class="text-xs text-whiskey-dark-700/50">
+                            <p class="text-xs text-neutral-dark-700/50">
                                 {{ book.local ? "Local stored" : "Cloud" }}
                             </p>
                         </span>
                     </div>
 
                     <div class="grid flex-grow">
-                        <p class="text-xs text-whiskey-dark-700/50">
+                        <p class="text-xs text-neutral-dark-700/50">
                             created
                             {{ dayjs(book.created || new Date()).fromNow() }}
                         </p>
                     </div>
                 </NuxtLink>
 
-                <PopoverRoot>
+                <!-- <PopoverRoot>
                     <PopoverTrigger
-                        class="transition absolute top-3 right-3 w-8 h-8 grid place-items-center rounded-md hover:(bg-whiskey-300)"
+                        class="transition absolute top-3 right-3 w-8 h-8 grid place-items-center rounded-md hover:(bg-neutral-300)"
                     >
                         <Icon name="solar:menu-dots-linear" />
                     </PopoverTrigger>
@@ -100,17 +101,17 @@ onUnmounted(() => {});
                             <PopoverArrow />
                         </PopoverContent>
                     </PopoverPortal>
-                </PopoverRoot>
+                </PopoverRoot> -->
             </div>
 
             <button
-                class="border-2 border-dashed border-whiskey-200 rounded-xl flex items-center justify-center gap-2 transition hover:(bg-whiskey-200 border-solid border-whiskey-300)"
+                :class="[
+                    'h-25 border-2 border-dashed border-neutral-200 rounded-xl flex items-center justify-center gap-2 transition hover:(bg-neutral-200 border-solid border-neutral-300)',
+                    'dark:(border-neutral-800 text-neutral-300) dark:hover:(border-neutral-700 bg-neutral-800)',
+                ]"
+                @click="createBook()"
             >
-                <Icon
-                    name="solar:add-square-linear"
-                    size="24"
-                    @click="createBook"
-                />
+                <Icon name="solar:add-square-linear" size="24" />
 
                 Create book
             </button>

@@ -1,15 +1,26 @@
 <script setup lang="ts">
-const route = useRoute();
-const router = useRouter();
-
 type Props = {
-    tabs: Array<{ label: string; to: string; icon: string | Component }>;
+    links: Array<{ label: string; to: string; icon: string | Component }>;
 };
 
-defineProps<Props>();
+const route = useRoute();
+const router = useRouter();
+const props = defineProps<Props>();
 </script>
 
 <template>
+    <Body
+        class="font-sans <sm:(pb-18 pt-2) sm:(pt-20) text-dark-700 dark:(bg-neutral-900 text-neutral-300)"
+    />
+
+    <nav class="p-2 flex justify-between sticky top-0">
+        <slot name="left" />
+
+        <div>
+            <slot name="right" />
+        </div>
+    </nav>
+
     <div
         :class="[
             'fixed md:(top-2 left-1/2 -translate-x-1/2) <md:(bottom-2 left-2 right-2) bg-neutral-100 p-2 rounded-xl select-none',
@@ -23,7 +34,7 @@ defineProps<Props>();
         >
             <TabsList class="flex items-center gap-2 <md:(grid grid-cols-4 )">
                 <TabsTrigger
-                    v-for="tab of tabs"
+                    v-for="tab of links"
                     :key="tab.to"
                     :value="tab.to"
                     :class="[

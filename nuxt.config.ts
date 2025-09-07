@@ -12,6 +12,11 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@unocss/nuxt", "reka-ui/nuxt", "@nuxt/icon", "@polar-sh/nuxt"],
   css: ["@unocss/reset/tailwind.css"],
+  icon: {
+    serverBundle: {
+      collections: ["solar", "simple-icons"],
+    },
+  },
   unocss: {
     presets: [
       presetWind3({ dark: "media" }),
@@ -23,6 +28,19 @@ export default defineNuxtConfig({
     ],
     theme: {
       colors: {
+        dim: {
+          50: "#D8DCDF",
+          100: "#CDD2D6",
+          200: "#BBC2C7",
+          300: "#A9B2B8",
+          400: "#9AA2A7",
+          500: "#8B9297",
+          600: "#7C8287",
+          700: "#6B7074",
+          800: "#5D6165",
+          900: "#4F5356",
+          950: "#484C4F",
+        },
         whiskey: {
           50: "#fbf5f1",
           100: "#f7ece4",
@@ -59,24 +77,20 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
-    tursoDatabaseUrl: "",
-    tursoAuthToken: "",
+    TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
+    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
 
-    betterAuthSecret: "",
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 
-    githubClientId: "",
-    githubClientSecret: "",
-    googleClientId: "",
-    googleClientSecret: "",
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
-    polarAccessToken: "",
-    polarWebhookSecret: "",
+    POLAR_ACCESS_TOKEN: process.env.POLAR_ACCESS_TOKEN,
+    POLAR_WEBHOOK_SECRET: process.env.POLAR_WEBHOOK_SECRET,
 
-    dodoSecret: "",
-    dodoWebhookSecret: "",
-
-    public: {
-      betterAuthUrl: "",
-    },
+    DODO_SECRET: process.env.DODO_SECRET,
+    DODO_WEBHOOK_SECRET: process.env.DODO_WEBHOOK_SECRET,
   },
 });
