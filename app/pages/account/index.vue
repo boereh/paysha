@@ -1,10 +1,11 @@
 <script setup lang="ts">
 const name_element = useTemplateRef("name_element");
-const session = auth_client.useSession();
+const router = useRouter();
+const { data: session } = await auth_client.useSession(useFetch);
 const new_name = reactive({ value: "", editing: false });
 const same_name = computed(() => {
-    if (!session.value.data) return false;
-    return new_name.value === session.value.data.user.name;
+    if (!session.value) return false;
+    return new_name.value === session.value.user.name;
 });
 
 async function updateName() {
@@ -16,23 +17,19 @@ async function updateName() {
     });
 }
 
-// useHead({
-//     script: [
-//         {
-//             src: "https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.1/dist/embed.global.js",
-//             defer: true,
-//             "data-auto-init": true,
-//         },
-//     ],
-// });
+onMounted(() => {
+    if (session.value !== null) return;
+
+    router.push("/account/signin");
+});
+
+useHead({
+    title: "Account | Paysha",
+});
 </script>
 
 <template>
-    <template v-if="session.isPending"></template>
-
-    <Signin v-else-if="session.data === null" />
-
-    <div v-else class="p-4 pt-0 <sm:(pb-0 pt-4)">
+    <div class="p-4 pt-0 <sm:(pb-0 pt-4)">
         <div class="max-w-7xl mx-auto flex flex-col gap-4">
             <h1 class="text-xl text-medium px-4">Account details</h1>
 
@@ -41,8 +38,8 @@ async function updateName() {
                     <img
                         class="w-12 h-12 rounded-lg"
                         :src="
-                            session.data.user.image ||
-                            `https://api.dicebear.com/9.x/initials/svg?seed=${session.data.user.name}`
+                            session?.user?.image ||
+                            `https://api.dicebear.com/9.x/initials/svg?seed=${session?.user?.name}`
                         "
                         alt="user profile picture"
                     />
@@ -52,7 +49,7 @@ async function updateName() {
                             Name</span
                         >
                         <span v-if="!new_name.editing">
-                            {{ session.data.user.name }}</span
+                            {{ session?.user?.name }}</span
                         >
                         <input
                             v-else
@@ -63,7 +60,7 @@ async function updateName() {
                             spellcheck="false"
                             autocomplete="off"
                             autofocus
-                            :placeholder="session.data.user.name"
+                            :placeholder="session?.user?.name"
                         />
                     </div>
 
@@ -91,7 +88,15 @@ async function updateName() {
 
                     <button
                         class="border px-4 h-10 whitespace-nowrap rounded-md border-red-300 text-red-400 hover:bg-red-100 transition flex items-center gap-2"
-                        @click="auth_client.signOut()"
+                        @click="
+                            auth_client.signOut({
+                                fetchOptions: {
+                                    onSuccess() {
+                                        router.push('/account/signin');
+                                    },
+                                },
+                            })
+                        "
                     >
                         <Icon name="solar:logout-2-linear" />
 
@@ -99,27 +104,23 @@ async function updateName() {
                     </button>
                 </div>
 
-                <hr class="my-4 border-neutral-300" />
+                <hr class="my-4 border-neutral-200" />
 
                 <table>
                     <tbody>
                         <tr>
                             <td>Email</td>
-                            <td>{{ session.data.user.email }}</td>
+                            <td>{{ session?.user.email }}</td>
                         </tr>
                         <tr>
                             <td>Email Verified</td>
                             <td>
-                                {{
-                                    session.data.user.emailVerified
-                                        ? "Yes"
-                                        : "No"
-                                }}
+                                {{ session?.user.emailVerified ? "Yes" : "No" }}
                             </td>
                         </tr>
                         <tr>
                             <td>ID</td>
-                            <td>{{ session.data.user.id }}</td>
+                            <td>{{ session?.user.id }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -142,14 +143,20 @@ async function updateName() {
 
             <div class="bg-neutral-100 p-4 rounded-xl col-span-3 flex">
                 <div class="flex-grow">
-                    <h3>Delete my account</h3>
+                    <h3>Delete account</h3>
 
-                    <p class="text-sm text-neutral-dark-700/50">
-                        This action is irreversible.
+                    <p class="text-sm text-neutral-500">
+                        Permanently delete account and all of your data. This
+                        action cannot be undone.
                     </p>
                 </div>
 
-                <button></button>
+                <button
+                    class="transition border border-red-300 hover:(bg-red-200) text-red-400 px-4 h-10 rounded-md flex items-center gap-2"
+                >
+                    <Icon name="solar:trash-bin-trash-linear" />
+                    Delete
+                </button>
             </div>
         </div>
     </div>

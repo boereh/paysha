@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       presetWind3({ dark: "media" }),
       presetWebFonts({
         fonts: {
-          sans: "Poppins:400,500,600",
+          sans: "Inter:400,500,600",
         },
       }),
     ],

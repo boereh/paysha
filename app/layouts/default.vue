@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import Paysha from "~/components/paysha.vue";
 
-const route = useRoute();
-const router = useRouter();
-
 useHead({
     title: "Paysha",
     link: [
@@ -17,6 +14,7 @@ useHead({
 </script>
 
 <template>
+    <Body class="<sm:(pb-18 pt-2) sm:(pt-18)" />
 
     <Tabs
         :tabs="[

@@ -9,7 +9,7 @@ const router = useRouter();
         <SelectRoot
             @update:model-value="
                 (v) => {
-                    if (v === 'new') return createBook();
+                    if (v === 'create') return router.push('/books/create');
                     if (current_book === null) return;
                     if (v === current_book.id) return;
 
@@ -75,7 +75,7 @@ const router = useRouter();
 
                     <SelectGroup class="px-2">
                         <SelectItem
-                            value="new"
+                            value="create"
                             class="px-2 flex items-center gap-2 h-10 text-neutral-500 rounded-md cursor-pointer outline-none hover:(bg-neutral-200)"
                         >
                             <Icon

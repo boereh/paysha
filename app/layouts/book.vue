@@ -50,7 +50,7 @@ onMounted(async () => {
 });
 
 useHead({
-    title: computed(() => (`${current_book.value?.title} - ` || "") + "Paysha"),
+    title: computed(() => (`${current_book.value?.title} | ` || "") + "Paysha"),
     link: [
         {
             rel: "icon",
@@ -66,9 +66,7 @@ useHead({
 </script>
 
 <template>
-    <Body
-        class="font-sans <sm:(mb-20) text-dark-900 dark:(bg-neutral-dark-800 text-neutral-300)"
-    />
+    <Body class="<sm:(pb-18 pt-2) sm:pt-0" />
 
     <nav
         class="sticky top-0 p-2 select-none relative flex justify-between items-center"

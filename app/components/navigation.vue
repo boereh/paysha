@@ -9,10 +9,6 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-    <Body
-        class="font-sans <sm:(pb-18 pt-2) sm:(pt-20) text-dark-700 dark:(bg-neutral-900 text-neutral-300)"
-    />
-
     <nav class="p-2 flex justify-between sticky top-0">
         <slot name="left" />
 

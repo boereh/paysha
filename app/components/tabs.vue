@@ -2,6 +2,12 @@
 const route = useRoute();
 const router = useRouter();
 
+const normalized_path = computed(() => {
+    if (route.path === "/") return "/";
+
+    return route.path.replace(/\/$/g, "");
+});
+
 type Props = {
     tabs: Array<{ label: string; to: string; icon: string | Component }>;
 };
@@ -10,6 +16,10 @@ defineProps<Props>();
 </script>
 
 <template>
+    <Body
+        class="font-sans text-zinc-900 dark:(bg-neutral-900 text-neutral-300)"
+    />
+
     <div
         :class="[
             'fixed md:(top-2 left-1/2 -translate-x-1/2) <md:(bottom-2 left-2 right-2) bg-neutral-100 p-2 rounded-xl select-none',
@@ -17,11 +27,11 @@ defineProps<Props>();
         ]"
     >
         <TabsRoot
-            :default-value="route.path"
-            :model-value="route.path"
+            :default-value="normalized_path"
+            :model-value="normalized_path"
             @update:model-value="(v) => router.push(v)"
         >
-            <TabsList class="flex items-center gap-2 <md:(grid grid-cols-4 )">
+            <TabsList class="flex items-center gap-2 <md:(grid grid-cols-4)">
                 <TabsTrigger
                     v-for="tab of tabs"
                     :key="tab.to"
