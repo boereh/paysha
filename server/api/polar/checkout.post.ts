@@ -1,3 +1,5 @@
+const CLOUD_BASIC_ID = getEnvVar("POLAR_CLOUD_BASIC_ID");
+
 export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({
     headers: event.headers,
@@ -11,7 +13,7 @@ export default defineEventHandler(async (event) => {
     externalId: user_id,
   });
   const index = customer.activeSubscriptions.findIndex(
-    (v) => v.productId === CLOUD_BASIC.productId && v.status === "active",
+    (v) => v.productId === CLOUD_BASIC_ID && v.status === "active",
   );
   if (index >= 0) return;
 

@@ -17,11 +17,9 @@ async function updateName() {
     });
 }
 
-onMounted(() => {
-    if (session.value !== null) return;
-
-    router.push("/account/signin");
-});
+if (session.value === null) {
+    router.push("/signin");
+}
 
 useHead({
     title: "Account | Paysha",
@@ -29,7 +27,7 @@ useHead({
 </script>
 
 <template>
-    <div class="p-4 pt-0 <sm:(pb-0 pt-4)">
+    <div v-if="session" class="p-4 pt-0 <sm:(pb-0 pt-4)">
         <div class="max-w-7xl mx-auto flex flex-col gap-4">
             <h1 class="text-xl text-medium px-4">Account details</h1>
 

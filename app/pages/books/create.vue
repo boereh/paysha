@@ -1,24 +1,36 @@
 <script setup lang="ts">
-const STORAGE_OPTIONS = [
+import { object, string, union, literal, type InferOutput } from "valibot";
+import type { FormError, FormSubmitEvent } from "@nuxt/ui";
+
+const STORAGE_OPTIONS: RadioGroupItem[] = [
     {
         label: "IndexedDB",
         description: "Save locally in the browser.",
+        value: "IndexedDB",
     },
     {
         label: "Cloud",
         description: "Save in the cloud.",
+        value: "Cloud",
     },
 ];
+type Schema = InferOutput<typeof schema>;
 
 const { data: active_subscription } = useFetch("/api/polar/active");
 const session = auth_client.useSession();
 const router = useRouter();
-const form = reactive({
+const toast = useToast();
+const state = reactive<Schema>({
     title: "",
     storage: "IndexedDB",
 });
+const schema = object({
+    title: string(),
+    storage: union([literal("IndexedDB"), literal("Cloud")]),
+});
+
 const disallowed_creation = computed(() => {
-    if (form.storage === "Cloud" && !active_subscription.value) return "plan";
+    if (state.storage === "Cloud" && !active_subscription.value) return "plan";
     return "";
 });
 
@@ -31,6 +43,15 @@ async function purchaseCloudPlan() {
 
     await navigateTo(url, { external: true });
 }
+
+async function onValidate(state: Schema) {
+    const errors: FormError[] = [];
+    if (!state.title) errors.push({ name: "email", message: "Required" });
+    if (!state.storage) errors.push({ name: "password", message: "Required" });
+    return errors;
+}
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {}
 
 useHead({
     title: "Create book | Paysha",
@@ -48,60 +69,70 @@ useHead({
                 Start your journey with this book.
             </p>
 
-            <div class="space-y-1 w-full">
-                <label class="text-sm text-neutral-700 capitalize">
-                    Book Name
-                </label>
+            <span>
+                <UForm
+                    :schema="schema"
+                    :state="state"
+                    class="space-y-4"
+                    :validate="
+                        (state) => {
+                            const errors: FormError[] = [];
+                            if (!state.title) {
+                                errors.push({
+                                    name: 'title',
+                                    message: 'Required',
+                                });
+                            }
+                            if (state.storage === 'Cloud' && !session.data) {
+                                errors.push({
+                                    name: 'storage',
+                                    message:
+                                        'Account required to store in the cloud',
+                                });
+                            }
 
-                <div>
-                    <input
-                        type="text"
-                        class="bg-white border border-neutral-200 rounded-md h-10 outline-none px-2 transition group-focus-within:border-blue-700 w-full"
-                    />
-                </div>
-            </div>
+                            console.log(
+                                state.storage === 'Cloud',
+                                !session.data,
+                            );
 
-            <div class="space-y-1 w-full">
-                <label class="text-sm text-neutral-700 capitalize">
-                    Save location
-                </label>
-
-                <div
-                    default-value="indexed"
-                    class="grid grid-cols-2 gap-4 w-full"
+                            return errors;
+                        }
+                    "
+                    @submit="onSubmit"
                 >
-                    <button
-                        v-for="option in STORAGE_OPTIONS"
-                        :key="option.label"
-                        :class="[
-                            'border-2 rounded-md transition duration-300 text-left p-4 flex items-center group',
-                            form.storage === option.label
-                                ? 'border-blue-700'
-                                : 'hover:(bg-neutral-100)',
-                        ]"
-                        @click="() => (form.storage = option.label)"
+                    <UFormField label="Book title" name="title" required>
+                        <UInput
+                            v-model="state.title"
+                            class="w-full"
+                            size="lg"
+                        />
+                    </UFormField>
+
+                    <UFormField
+                        label="Storage location"
+                        name="storage"
+                        required
                     >
-                        <div class="flex-grow">
-                            {{ option.label }}
+                        <URadioGroup
+                            v-model="state.storage"
+                            orientation="horizontal"
+                            indicator="end"
+                            variant="card"
+                            default-value="IndexedDB"
+                            :items="STORAGE_OPTIONS"
+                            class="w-full"
+                            :ui="{
+                                item: 'flex-grow',
+                            }"
+                        />
+                    </UFormField>
 
-                            <p class="text-sm">
-                                {{ option.description }}
-                            </p>
-                        </div>
+                    <UButton type="submit"> Create </UButton>
+                </UForm>
+            </span>
 
-                        <span
-                            :class="[
-                                'w-4 h-4 rounded-full border-4 bg-transparent transition',
-                                form.storage === option.label &&
-                                    'border-blue-500',
-                            ]"
-                        >
-                        </span>
-                    </button>
-                </div>
-            </div>
-
-            <div
+            <!-- <div
                 v-if="disallowed_creation === 'plan'"
                 class="flex items-center gap-2 py-4"
             >
@@ -117,16 +148,7 @@ useHead({
                 >
                     Purchase plan
                 </button>
-            </div>
-
-            <button
-                :class="[
-                    'bg-blue-700 text-white px-4 h-10 rounded w-full transition',
-                    disallowed_creation && 'cursor-not-allowed opacity-50',
-                ]"
-            >
-                Create book
-            </button>
+            </div> -->
         </div>
     </div>
 </template>

@@ -7,6 +7,7 @@ import {
   boolean,
   optional,
   type InferOutput,
+  safeParse,
 } from "valibot";
 import { get, set, createStore, keys, values } from "idb-keyval";
 import { nanoid } from "nanoid";
@@ -88,4 +89,17 @@ export async function createBook(opts?: { title?: string }) {
   books.value.push(book);
 
   return router.push(`/books/${id}`);
+}
+
+export async function pushBooksToState(books: Book[] | Book) {
+  const books_state = useBooks();
+
+  if (!Array.isArray(books)) books = [books];
+
+  for (const b of books) {
+    const { success } = safeParse(BOOK_SCHEMA, b);
+    if (!success) continue;
+
+    books_state.value.push(b);
+  }
 }

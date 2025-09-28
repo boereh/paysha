@@ -51,15 +51,12 @@ useHead({
         <div
             class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
         >
-            <NuxtLink
+            <UButton
                 v-for="book in books"
                 :key="book.id"
                 :to="`/books/${book.id}`"
-                :class="[
-                    'h-25 bg-neutral-100 p-4 space-y-2 rounded-xl transition group cursor-pointer relative',
-                    'hover:(bg-neutral-200)',
-                    'dark:(bg-neutral-800) dark:hover:(bg-neutral-800)',
-                ]"
+                color="neutral"
+                class="h-25"
                 @click="() => (current_book = book)"
             >
                 <div class="flex gap-2 mr-8">
@@ -102,19 +99,18 @@ useHead({
                         </PopoverContent>
                     </PopoverPortal>
                 </PopoverRoot> -->
-            </NuxtLink>
+            </UButton>
 
-            <NuxtLink
+            <UButton
                 to="/books/create"
-                :class="[
-                    'h-25 border-2 border-dashed border-neutral-200 rounded-xl flex items-center justify-center gap-2 transition hover:(bg-neutral-200 border-solid)',
-                    'dark:(border-neutral-800 text-neutral-300) dark:hover:(border-neutral-700 bg-neutral-800)',
-                ]"
+                variant="outline"
+                color="neutral"
+                class="h-25 justify-center"
             >
                 <Icon name="solar:add-square-linear" size="24" />
 
                 Create book
-            </NuxtLink>
+            </UButton>
         </div>
     </div>
 </template>

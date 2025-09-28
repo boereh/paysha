@@ -10,22 +10,22 @@ import {
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
-  modules: ["@unocss/nuxt", "reka-ui/nuxt", "@nuxt/icon", "@polar-sh/nuxt"],
-  css: ["@unocss/reset/tailwind.css"],
+  modules: [
+    "@unocss/nuxt",
+    "@nuxt/icon",
+    "@polar-sh/nuxt",
+    "@nuxt/ui",
+    "@nuxt/fonts",
+  ],
+  css: ["~/assets/main.css"],
   icon: {
     serverBundle: {
       collections: ["solar", "simple-icons"],
     },
   },
+
   unocss: {
-    presets: [
-      presetWind3({ dark: "media" }),
-      presetWebFonts({
-        fonts: {
-          sans: "Inter:400,500,600",
-        },
-      }),
-    ],
+    presets: [presetWind3({ dark: "media" })],
     theme: {
       colors: {
         dim: {
@@ -77,20 +77,36 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
 
-    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
-
-    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
+    DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+    FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GITLAB_CLIENT_ID: process.env.GITLAB_CLIENT_ID,
+    GITLAB_CLIENT_SECRET: process.env.GITLAB_CLIENT_SECRET,
+    GITLAB_ISSUER: process.env.GITLAB_ISSUER,
+    LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
+    LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
+    REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
+    REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
+    ROBLOX_CLIENT_ID: process.env.ROBLOX_CLIENT_ID,
+    ROBLOX_CLIENT_SECRET: process.env.ROBLOX_CLIENT_SECRET,
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
+    TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
+    TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
+    TWITTER_CLIENT_ID: process.env.TWITTER_CLIENT_ID,
+    TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
 
     POLAR_ACCESS_TOKEN: process.env.POLAR_ACCESS_TOKEN,
     POLAR_WEBHOOK_SECRET: process.env.POLAR_WEBHOOK_SECRET,
-
-    DODO_SECRET: process.env.DODO_SECRET,
-    DODO_WEBHOOK_SECRET: process.env.DODO_WEBHOOK_SECRET,
   },
 });
