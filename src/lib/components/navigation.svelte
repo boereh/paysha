@@ -1,10 +1,6 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
-	import Gear from '~icons/ph/gear-fill';
-	import House from '~icons/ph/house-line-fill';
-	import CardsThree from '~icons/ph/cards-three-fill';
-	import ListBullets from '~icons/ph/list-bullets-fill';
-	import ChartPieSlice from '~icons/ph/chart-pie-slice-fill';
+	import { Gear, House, CardsThree, ListBullets, ChartPieSlice } from 'phsv/fill';
 	import { page } from '$app/state';
 
 	const LINKS: [string, string, Component][] = [

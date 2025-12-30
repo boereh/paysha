@@ -34,6 +34,7 @@
 		const ls = useLocalStorage();
 		const bookstore = useBookStore();
 		const current_bookid = await ls.get<string>('current-bookid');
+
 		if (current_bookid) {
 			const book = await bookstore.get(current_bookid);
 
@@ -44,9 +45,9 @@
 			}
 		}
 
-		current.loading = false;
-		await tick();
 		current.book = createExampleBook();
+		await tick();
+		current.loading = false;
 		ls.set('current-bookid', current.book.id);
 	});
 
