@@ -30,8 +30,9 @@
 			{#snippet child({ props, open })}
 				<div
 					{...props}
-					class={['fixed inset-0 transition-all ', open ? 'bg-black/25' : '']}
+					class={['fixed inset-0 transition-all select-none ', open ? 'bg-zinc-50/75' : '']}
 					style:pointer-events={open ? 'auto' : 'none'}
+					oncontextmenu={(e) => e.preventDefault()}
 				></div>
 			{/snippet}
 		</Dialog.Overlay>

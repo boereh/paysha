@@ -1,48 +1,87 @@
 <script lang="ts">
 	import { useCurrent } from '$lib/context';
 	import { type Category } from '$lib/schemas/books';
-	import { Plus } from 'phsv';
+	import { Plus, QuestionMark } from 'phsv';
 	import * as icons from 'phsv/fill';
 	import { type Component } from 'svelte';
 	import uniqolor from 'uniqolor';
-	import { longpress } from '$lib/utils';
 	import NewTransaction from '$lib/components/new-transaction.svelte';
-	import NewCategory from '$lib/components/new-category.svelte';
+	import CategoryDialog from '$lib/components/category-dialog.svelte';
+	import { nanoid } from 'nanoid';
+	import { watch } from 'runed';
 
 	const current = useCurrent();
 	const expense_cat = $derived(current.book?.categories.filter((v) => v.type === 'expense') || []);
 	const income_cat = $derived(current.book?.categories.filter((v) => v.type === 'income') || []);
 	let new_transaction = $state(-1);
-	let new_category = $state<Category['type']>();
+	let category_context = $state<{ create?: Category['type']; edit: number }>({
+		create: undefined,
+		edit: -1,
+	});
+	let touch_start = $state(-1);
+	let ts_timeout = $state<NodeJS.Timeout>();
 
 	const TYPES = $derived([
 		{ label: 'Expense', categories: expense_cat, icon: '' },
 		{ label: 'Income', categories: income_cat, icon: '' },
 	]);
+
+	watch(
+		() => $state.snapshot(touch_start),
+		(v) => {
+			if (v < 0) return;
+			if (ts_timeout) clearTimeout(ts_timeout);
+			ts_timeout = setTimeout(() => {
+				if (touch_start !== v) return;
+				category_context.edit = v;
+				clear_touch();
+			}, 500);
+		},
+		{ lazy: true },
+	);
+
+	function clear_touch() {
+		touch_start = -1;
+		clearTimeout(ts_timeout);
+	}
 </script>
 
-<div
-	class="p-4 space-y-4"
-	use:longpress
-	onlongpress={() => {
-		console.log('what');
-	}}
->
+<div class="p-4 space-y-4">
 	{#each TYPES as types, tidx (tidx)}
-		<h1 class="px-4 mb-4">{types.label}</h1>
-
-		<div class="w-full mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-8">
-			{#each types.categories as cat, idx (idx)}
-				{@render category(cat)}
-			{/each}
+		<h1 class="flex items-center justify-between">
+			{types.label}
 
 			<button
-				class="text-xs border border-zinc-300 border-dashed flex items-center justify-center gap-2 rounded-md min-h-20"
-				onclick={() => (new_category = types.categories[0].type)}
+				class="text-xs border border-zinc-300 border-dashed grid place-items-center gap-2 rounded-md size-8"
+				onclick={() => (category_context.create = types.categories[0].type)}
 			>
 				<Plus class="size-4" />
-				Add
 			</button>
+		</h1>
+
+		<div class="w-full mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-8">
+			{#if current.loading}
+				{#each { length: 3 }, idx (idx)}
+					<div class="bg-white min-h-20 p-4 rounded-lg border border-zinc-100 space-y-4 text-sm">
+						<div class="flex justify-between items-center animate-pulse">
+							<span
+								class="size-6 grid place-items-center rounded-sm text-white"
+								style:background={uniqolor(nanoid(), { lightness: [30, 50] }).color}
+							>
+								<QuestionMark class="size-5" />
+							</span>
+
+							<span class="rounded-full">$0</span>
+						</div>
+
+						<div class="rounded-full bg-zinc-300 animate-pulse text-transparent text-xs">x</div>
+					</div>
+				{/each}
+			{:else}
+				{#each types.categories as cat, idx (idx)}
+					{@render category(cat)}
+				{/each}
+			{/if}
 		</div>
 	{/each}
 </div>
@@ -55,13 +94,25 @@
 	{@const Icon = (icons as Record<string, Component>)[cat.icon]}
 
 	<button
-		class="border p-4 rounded-lg border-zinc-100 text-left flex flex-col gap-4 bg-white"
+		class="border p-4 rounded-lg border-zinc-100 text-left flex flex-col gap-4 bg-white min-h-20 <md:select-none"
 		onclick={() => {
 			if (idx === undefined) return;
 			new_transaction = idx;
+			clear_touch();
+		}}
+		oncontextmenu={(e) => {
+			e.preventDefault();
+			console.log(idx);
+			if (idx === undefined) return;
+			category_context.edit = idx;
+			clear_touch();
+		}}
+		ontouchstart={() => {
+			if (idx === undefined) return;
+			touch_start = idx;
 		}}
 	>
-		<div class="flex justify-between items-center text-sm font-medium">
+		<div class="flex justify-between items-center text-sm">
 			<span
 				class="p-1 grid place-items-center text-white rounded-sm"
 				style:background={cat.color || uniqolor(cat.id, { lightness: [30, 50] }).color}
@@ -79,4 +130,4 @@
 
 <NewTransaction bind:index={new_transaction} />
 
-<NewCategory bind:type={new_category} />
+<CategoryDialog bind:create={category_context.create} bind:edit={category_context.edit} />

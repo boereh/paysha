@@ -21,7 +21,7 @@
 <div class="fixed bottom-0 left-0 right-0 p-2 py-4 md:sticky">
 	<div
 		bind:this={container_el}
-		class="bg-zinc-100 border border-white rounded-2xl flex p-1 relative shadow-lg shadow-black/5"
+		class="bg-zinc-100 border border-white rounded-2xl flex p-1 relative shadow-lg shadow-black/5 font-medium"
 	>
 		{#each LINKS as [label, href, Icon], idx (idx)}
 			{@const is_link =
@@ -33,7 +33,7 @@
 			>
 				<Icon class={['size-5 transition absolute', is_link ? 'opacity-0' : 'opacity-50']} />
 
-				<span class={['transition font-medium', is_link ? '' : 'opacity-0']}>
+				<span class={['transition', is_link ? '' : 'opacity-0']}>
 					{label}
 				</span>
 			</a>
