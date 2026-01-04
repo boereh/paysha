@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { useCurrent } from '$lib/context';
 	import { type Category } from '$lib/schemas/books';
-	import { Plus, QuestionMark } from 'phsv';
-	import * as icons from 'phsv/fill';
-	import { type Component } from 'svelte';
+	import { Plus } from 'phsv';
+	import { ICONS } from '$lib/utils';
 	import uniqolor from 'uniqolor';
-	import NewTransaction from '$lib/components/new-transaction.svelte';
+	import TransactionDialog from '$lib/components/transaction-dialog.svelte';
 	import CategoryDialog from '$lib/components/category-dialog.svelte';
-	import { nanoid } from 'nanoid';
 	import { watch } from 'runed';
 
 	const current = useCurrent();
 	const expense_cat = $derived(current.book?.categories.filter((v) => v.type === 'expense') || []);
 	const income_cat = $derived(current.book?.categories.filter((v) => v.type === 'income') || []);
-	let new_transaction = $state(-1);
+	let transaction = $state(0);
 	let category_context = $state<{ create?: Category['type']; edit: number }>({
 		create: undefined,
 		edit: -1,
@@ -52,10 +50,10 @@
 			{types.label}
 
 			<button
-				class="text-xs border border-zinc-300 border-dashed grid place-items-center gap-2 rounded-md size-8"
+				class="text-xs border border-zinc-200 bg-zinc-100 grid place-items-center gap-2 rounded-md size-6"
 				onclick={() => (category_context.create = types.categories[0].type)}
 			>
-				<Plus class="size-4" />
+				<Plus class="size-3" />
 			</button>
 		</h1>
 
@@ -64,17 +62,13 @@
 				{#each { length: 3 }, idx (idx)}
 					<div class="bg-white min-h-20 p-4 rounded-lg border border-zinc-100 space-y-4 text-sm">
 						<div class="flex justify-between items-center animate-pulse">
-							<span
-								class="size-6 grid place-items-center rounded-sm text-white"
-								style:background={uniqolor(nanoid(), { lightness: [30, 50] }).color}
-							>
-								<QuestionMark class="size-5" />
+							<span class="size-6 grid place-items-center bg-zinc-300 rounded-sm text-white">
 							</span>
 
 							<span class="rounded-full">$0</span>
 						</div>
 
-						<div class="rounded-full bg-zinc-300 animate-pulse text-transparent text-xs">x</div>
+						<div class="rounded bg-zinc-300 animate-pulse text-transparent text-xs">x</div>
 					</div>
 				{/each}
 			{:else}
@@ -91,18 +85,17 @@
 	{@const total_amount = current.book?.transactions
 		.filter((v) => v.category === cat.name)
 		.reduce((a, b) => a + b.amount, 0)}
-	{@const Icon = (icons as Record<string, Component>)[cat.icon]}
+	{@const Icon = ICONS[cat.icon]}
 
 	<button
 		class="border p-4 rounded-lg border-zinc-100 text-left flex flex-col gap-4 bg-white min-h-20 <md:select-none"
 		onclick={() => {
 			if (idx === undefined) return;
-			new_transaction = idx;
+			transaction = idx;
 			clear_touch();
 		}}
 		oncontextmenu={(e) => {
 			e.preventDefault();
-			console.log(idx);
 			if (idx === undefined) return;
 			category_context.edit = idx;
 			clear_touch();
@@ -128,6 +121,6 @@
 	</button>
 {/snippet}
 
-<NewTransaction bind:index={new_transaction} />
+<TransactionDialog bind:index={transaction} />
 
 <CategoryDialog bind:create={category_context.create} bind:edit={category_context.edit} />

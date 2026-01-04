@@ -1,32 +1,35 @@
-import type { Action } from 'svelte/action';
-import { on } from 'svelte/events';
+import * as icons from 'phsv/fill';
+import type { Component } from 'svelte';
+import { icons as phicons, FigmaCategory } from '@phosphor-icons/core';
 
-export const longpress: Action<
-	HTMLElement,
-	number | undefined,
-	{ onlongpress: (e: CustomEvent) => unknown }
-> = (node, threshold = 500) => {
-	let timeout: NodeJS.Timeout;
+export const ICONS: Record<string, Component> = icons;
+export const ICONS_CATEGORIZED = categorizeIcons();
 
-	function start() {
-		timeout = setTimeout(() => {
-			node.dispatchEvent(new CustomEvent('longpress'));
-		}, threshold);
-	}
-
-	function cancel() {
-		if (timeout) clearTimeout(timeout);
-	}
-
-	const moved = on(node, 'pointermove', cancel);
-	const uped = on(node, 'pointerup', cancel);
-	const downed = on(node, 'pointerdown', start);
-
-	return {
-		destroy() {
-			moved();
-			uped();
-			downed();
-		},
+export function categorizeIcons() {
+	const result: Record<FigmaCategory, string[]> = {
+		arrows: [],
+		brands: [],
+		commerce: [],
+		communication: [],
+		design: [],
+		'technology & development': [],
+		education: [],
+		'math & finance': [],
+		games: [],
+		'health & wellness': [],
+		'maps & travel': [],
+		media: [],
+		'office & editing': [],
+		people: [],
+		'security & warnings': [],
+		'system & devices': [],
+		time: [],
+		'weather & nature': [],
 	};
-};
+
+	for (const icon of phicons) {
+		result[icon.figma_category].push(icon.pascal_name);
+	}
+
+	return result;
+}

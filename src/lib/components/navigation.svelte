@@ -16,9 +16,17 @@
 	const link_els = $state<HTMLAnchorElement[]>([]);
 	const link_idx = $derived(LINKS.findIndex((v) => v[1] === page.url.pathname));
 	const link_boundings = $derived(link_els.map((v) => v.getBoundingClientRect()));
+
+	const indicator_left = $derived.by(() => {
+		if (!container_bounding || !link_boundings[link_idx]) {
+			return LINKS.findIndex((v) => v[1] === page.url.pathname) * 20 + 10 + '%';
+		}
+
+		return link_boundings[link_idx].left - container_bounding.left + 'px';
+	});
 </script>
 
-<div class="fixed bottom-0 left-0 right-0 p-2 py-4 md:sticky">
+<div class="fixed bottom-0 left-0 right-0 p-4 md:sticky">
 	<div
 		bind:this={container_el}
 		class="bg-zinc-100 border border-white rounded-2xl flex p-1 relative shadow-lg shadow-black/5 font-medium"
@@ -29,7 +37,7 @@
 			<a
 				bind:this={link_els[idx]}
 				{href}
-				class="text-xs flex-1 flex flex-col items-center justify-center px-2 rounded-md h-12 transition z-1 relative"
+				class="text-xs flex-1 flex flex-col items-center justify-center px-2 rounded-md h-12 transition-all z-1 relative"
 			>
 				<Icon class={['size-5 transition absolute', is_link ? 'opacity-0' : 'opacity-50']} />
 
@@ -40,9 +48,12 @@
 		{/each}
 
 		<span
-			class="h-12 bg-white rounded-xl absolute z-0 transition-all duration-300 shadow"
+			class={[
+				'bg-white absolute z-0 transition-all duration-300 shadow top-1/2 -translate-y-1/2',
+				indicator_left.includes('%') ? 'rounded-[999px] h-0' : 'rounded-xl h-12',
+			]}
 			style:width="{link_boundings[link_idx]?.width || 0}px"
-			style:left="{(link_boundings[link_idx]?.left || 0) - (container_bounding?.left || 0)}px"
+			style:left={indicator_left}
 		>
 		</span>
 	</div>

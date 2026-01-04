@@ -56,7 +56,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>Paysha</title>
+	<title>paysha</title>
 </svelte:head>
 
 <Navigation />

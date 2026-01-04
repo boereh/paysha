@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { useCurrent } from '$lib/context';
-	import { Dialog } from 'bits-ui';
+	import { Dialog, Portal, Select } from 'bits-ui';
 	import { nanoid } from 'nanoid';
-	import * as icons from 'phsv/fill';
+	import { ICONS, ICONS_CATEGORIZED } from '$lib/utils';
 	import { X, Plus } from 'phsv';
 	import type { Category } from '$lib/schemas/books';
 	import { watch } from 'runed';
-	import { type Component } from 'svelte';
 	import uniqolor from 'uniqolor';
-
-	const ICONS = icons as Record<string, Component>;
+	import IconsSelect from './icons-select.svelte';
 
 	type Props = {
 		create?: Category['type'];
@@ -75,7 +73,7 @@
 				<div
 					{...props}
 					class={[
-						'bg-white border border-zinc-200 rounded-t-lg p-4 bottom-0 fixed left-0 right-0 transition-all flex flex-col gap-4',
+						'bg-white border-t border-zinc-100 rounded-t-2xl p-4 bottom-0 fixed left-0 right-0 transition-all flex flex-col gap-4',
 						open ? '' : 'translate-y-full',
 					]}
 					style:pointer-events={open ? 'auto' : 'none'}
@@ -129,7 +127,20 @@
 
 					<label for="" class="text-sm -mb-2"> Icon </label>
 
-					<div class="overflow-x-auto flex flex-col max-h-26 gap-1 flex-wrap">
+					<IconsSelect
+						bind:value={
+							() => {
+								if (edit < 0 || !current.book) return new_category.icon;
+								return current.book.categories[edit].icon;
+							},
+							(v) => {
+								if (edit < 0 || !current.book) return (new_category.icon = v);
+								current.book.categories[edit].icon = v;
+							}
+						}
+					/>
+
+					<!-- <div class="flex gap-1">
 						{#if edit > -1 ? current.book?.categories[edit].icon : new_category.icon}
 							<div class="w-8 h-26">
 								<div
@@ -141,7 +152,36 @@
 							</div>
 						{/if}
 
-						{#each Object.keys(ICONS) as key, kidx (kidx)}
+						<div class="flex overflow-x-auto gap-4">
+							{#each Object.entries(ICONS_CATEGORIZED) as [cat, icons], idx (idx)}
+								<div class="min-w-fit">
+									<div class="text-xs capitalize font-medium text-zinc-500">{cat}</div>
+									<div class="flex flex-col flex-wrap max-h-34 gap-1">
+										{#each icons as key, iidx (iidx)}
+											{@const Icon = ICONS[key]}
+
+											<button
+												class={[
+													'size-8 grid place-items-center rounded transition',
+													current_icon_key === key ? ' text-white' : 'bg-zinc-50',
+												]}
+												style:background={current_icon_key === key
+													? new_category.color || id_color
+													: ''}
+												onclick={() => {
+													if (edit < 0) return (new_category.icon = key);
+													if (!current.book) return;
+													current.book.categories[edit].icon = key;
+												}}
+											>
+												<Icon class="size-4" />
+											</button>
+										{/each}
+									</div>
+								</div>
+							{/each}
+						</div> -->
+					<!-- {#each Object.keys(ICONS) as key, kidx (kidx)}
 							{@const Icon = ICONS[key]}
 
 							<button
@@ -158,8 +198,8 @@
 							>
 								<Icon class="size-4" />
 							</button>
-						{/each}
-					</div>
+						{/each} -->
+					<!-- </div> -->
 
 					<label for="cat-name" class="text-sm -mb-2">Color</label>
 

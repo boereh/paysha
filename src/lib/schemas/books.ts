@@ -1,8 +1,20 @@
-import { string, boolean, object, number, array, union, literal, type InferInput } from 'valibot';
+import {
+	string,
+	boolean,
+	object,
+	number,
+	array,
+	union,
+	literal,
+	type InferInput,
+	intersect,
+	omit,
+} from 'valibot';
 
 export type Account = InferInput<typeof ACCOUNT>;
 export type Category = InferInput<typeof CATEGORY>;
 export type Transaction = InferInput<typeof TRANSACTION>;
+export type Recurring = InferInput<typeof RECURRING>;
 export type Book = InferInput<typeof BOOK>;
 
 export const ACCOUNT = object({
@@ -34,6 +46,13 @@ export const TRANSACTION = object({
 	account: string(),
 	tags: string(),
 });
+
+export const RECURRING = intersect([
+	omit(TRANSACTION, ['date']),
+	object({
+		cron: string(),
+	}),
+]);
 
 export const BOOK = object({
 	id: string(),
