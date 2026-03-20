@@ -1,57 +1,24 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
-	import 'virtual:uno.css';
-	import Navigation from '$lib/components/navigation.svelte';
-	import { setCurrent, type CurrentContext } from '$lib/context';
 	import { page } from '$app/state';
-	import { watch } from 'runed';
-	import { onMount, tick } from 'svelte';
-	import { useBookStore, useLocalStorage } from '$lib/storage';
-	import { createExampleBook } from '$lib';
+	import favicon from '$lib/assets/paysha-icon.svg';
+	import LogoIcon from '$lib/components/logo-icon.svelte';
+	import { setLedgerContext } from '$lib/contexts';
+	import { Icon } from 'uisv';
+	import 'virtual:uno.css';
 
-	const { children } = $props();
-	const current = $state<CurrentContext>({ book: page.data.book, loading: true });
-
-	watch(
-		() => $state.snapshot(current),
-		({ book, loading }, prev) => {
-			if (loading) return;
-
-			if (book && book.local) {
-				const bookstore = useBookStore();
-				bookstore.set(book.id, book);
-			}
-
-			if (prev?.book && !book) {
-				console.log(prev.book, 'what');
-			}
-		},
-		{ lazy: true },
-	);
-
-	onMount(async () => {
-		if (current.book) return;
-		const ls = useLocalStorage();
-		const bookstore = useBookStore();
-		const current_bookid = await ls.get<string>('current-bookid');
-
-		if (current_bookid) {
-			const book = await bookstore.get(current_bookid);
-
-			if (book) {
-				current.book = book;
-				current.loading = false;
-				return;
-			}
-		}
-
-		current.book = createExampleBook();
-		await tick();
-		current.loading = false;
-		ls.set('current-bookid', current.book.id);
+	let { children } = $props();
+	const ledger = $state<ReturnType<typeof setLedgerContext>>({
+		current: null,
+		loading: true,
 	});
+	const LINKS = [
+		{ href: '/', label: 'Home', icon: LogoIcon },
+		{ href: '/accounts', label: 'Accounts', icon: 'i-solar:wallet-money-linear' },
+		{ href: '/transactions', label: 'Transactions', icon: 'i-solar:bill-list-linear' },
+		{ href: '/settings', label: 'Settings', icon: 'i-solar:settings-linear' },
+	];
 
-	setCurrent(current);
+	setLedgerContext(ledger);
 </script>
 
 <svelte:head>
@@ -59,12 +26,39 @@
 	<title>paysha</title>
 </svelte:head>
 
-<Navigation />
+<nav
+	class={[
+		'<sm:(fixed bottom-0 border-t) left-0 right-0 border-surface-accented bg-white p-2',
+		'sm:(sticky top-0 border-b)',
+	]}
+>
+	<div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
+		{#each LINKS as link, idx (idx)}
+			{@const is_link = page.url.pathname === link.href}
+
+			<a
+				href={link.href}
+				class={[
+					'flex flex-col items-center justify-center gap-1 transition relative h-12',
+					is_link ? 'text-primary-500' : 'text-muted',
+				]}
+			>
+				<Icon
+					name={link.icon}
+					class={['size-6 transition-all', link.href === '/' && 'py-0.5', is_link ? 'mb-4' : '']}
+				/>
+
+				<span
+					class={[
+						'text-xs tracking-wide transition-all absolute top-8 font-medium',
+						is_link ? '' : 'text-transparent',
+					]}
+				>
+					{link.label}
+				</span>
+			</a>
+		{/each}
+	</div>
+</nav>
 
 {@render children()}
-
-<style>
-	:global(body) {
-		@apply: bg-zinc-50 pb-22;
-	}
-</style>
