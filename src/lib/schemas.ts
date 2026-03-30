@@ -1,18 +1,44 @@
-import { array, intersect, number, object, omit, string, type InferInput } from 'valibot';
+import {
+	array,
+	boolean,
+	intersect,
+	literal,
+	maxValue,
+	minValue,
+	number,
+	object,
+	omit,
+	optional,
+	pipe,
+	string,
+	union,
+	type InferInput,
+} from 'valibot';
 
-export type Ledger = InferInput<typeof LEDGER>;
-export type Account = InferInput<typeof ACCOUNT>;
-export type Transaction = InferInput<typeof TRANSACTION>;
-export type Reccurring = InferInput<typeof RECCURING>;
+export type Ledger = InferInput<typeof LEDGER_SCHEMA>;
+export type Account = InferInput<typeof ACCOUNT_SCHEMA>;
+export type Transaction = InferInput<typeof TRANSACTION_SCHEMA>;
+export type Reccurring = InferInput<typeof RECCURING_SCHEMA>;
+export type Budget = InferInput<typeof BUDGET_SCHEMA>;
 
-export const ACCOUNT = object({
+export const ACCOUNT_SCHEMA = object({
 	id: string(),
 	name: string(),
 	text: string(),
-	max: number(),
+	starting: number(),
+	/** For account like credit cards */
+	creditline: optional(pipe(number(), maxValue(0))),
 });
 
-export const TRANSACTION = object({
+export const CATREORY_SCHEMA = object({
+	id: string(),
+	type: union([literal('income'), literal('expense')]),
+	name: string(),
+	icon: string(),
+	color: string(),
+});
+
+export const TRANSACTION_SCHEMA = object({
 	id: string(),
 	amount: number(),
 	account: string(),
@@ -21,19 +47,45 @@ export const TRANSACTION = object({
 	note: string(),
 });
 
-export const RECCURING = intersect([
-	omit(TRANSACTION, ['timestamp']),
+export const RECCURING_SCHEMA = intersect([
+	omit(TRANSACTION_SCHEMA, ['timestamp']),
 	object({
 		cron: string(),
 	}),
 ]);
 
-export const LEDGER = object({
+export const BUDGET_SCHEMA = object({
+	frequency: union([literal('day'), literal('week'), literal('biweek'), literal('month')]),
+	rollover: boolean(),
+	starting: number(),
+	categories: array(CATREORY_SCHEMA),
+});
+
+export const LEDGER_SCHEMA = object({
 	id: string(),
-	title: string(),
+	name: string(),
 	updated: number(),
 	created: number(),
-	transactions: array(TRANSACTION),
-	accounts: array(ACCOUNT),
-	recurrings: array(RECCURING),
+	authors: array(string()),
+	transactions: array(TRANSACTION_SCHEMA),
+	accounts: array(ACCOUNT_SCHEMA),
+	recurrings: array(RECCURING_SCHEMA),
+	budgets: array(BUDGET_SCHEMA),
+	storage: union([literal('local'), literal('server')]),
+	/**
+	 * Automatically roll over balance from the previous month
+	 */
+	rollover: boolean(),
+	startdayofmonth: pipe(number(), minValue(1), maxValue(31)),
+	startdayofweek: union([
+		literal('sunday'),
+		literal('monday'),
+		literal('tuesday'),
+		literal('wednesday'),
+		literal('thursday'),
+		literal('friday'),
+		literal('saturday'),
+	]),
+	/** Enable the option for transations to be not yet paid */
+	enable_nonpaid: boolean(),
 });

@@ -8,7 +8,7 @@ export default defineConfig({
 		uisv({
 			fonts: {
 				fonts: {
-					sans: 'Montserrat:400,500,600,700,900',
+					sans: 'Inter:400,500,600,700,900',
 				},
 			},
 		}),
