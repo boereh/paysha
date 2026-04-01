@@ -11,3 +11,11 @@
 </svelte:head>
 
 {@render children()}
+
+<style>
+	:global {
+		body {
+			@apply bg-surface-base;
+		}
+	}
+</style>

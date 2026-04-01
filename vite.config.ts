@@ -8,7 +8,8 @@ export default defineConfig({
 		uisv({
 			fonts: {
 				fonts: {
-					sans: 'Inter:400,500,600,700,900',
+					sans: 'Geist:400,500,600,700,900',
+					mono: 'Geist Mono',
 				},
 			},
 		}),
