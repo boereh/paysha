@@ -88,4 +88,5 @@ export const LEDGER_SCHEMA = object({
 	]),
 	/** Enable the option for transations to be not yet paid */
 	enable_nonpaid: boolean(),
+	default_account: string(),
 });

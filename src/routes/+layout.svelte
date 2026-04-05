@@ -1,8 +1,11 @@
 <script lang="ts">
 	import favicon from '$lib/assets/paysha-icon.svg';
+	import { ModeWatcher } from 'mode-watcher';
 	import 'virtual:uno.css';
 
 	let { children } = $props();
+
+	$effect(() => {});
 </script>
 
 <svelte:head>
@@ -10,12 +13,14 @@
 	<title>paysha</title>
 </svelte:head>
 
+<ModeWatcher />
+
 {@render children()}
 
 <style>
 	:global {
 		body {
-			@apply bg-surface-base;
+			@apply bg-inverted;
 		}
 	}
 </style>

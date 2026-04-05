@@ -2,7 +2,7 @@
 	import LedgerCard from '$lib/components/ledger-card.svelte';
 	import { useLedgerContext } from '$lib/contexts';
 	import { LEDGER_SCHEMA, type Ledger } from '$lib/schemas';
-	import { useLedgerStorage } from '$lib/utils/ledger.svelte';
+	import { useLedgerStore } from '$lib/utils/ledger.svelte';
 	import { Button } from 'uisv';
 	import { onMount } from 'svelte';
 	import { safeParse } from 'valibot';
@@ -15,11 +15,11 @@
 	let delete_confirm = $state(false);
 
 	onMount(async () => {
-		const storage = useLedgerStorage();
+		const storage = useLedgerStore();
 
 		for (const id of await storage.keys()) {
-			const { success, output } = safeParse(LEDGER_SCHEMA, await storage.get(id));
-			if (!success || ledgers.find((x) => x.id === output.id)) continue;
+			const { success, output } = safeParse(LEDGER_SCHEMA, await storage.getItem(id));
+			if (!success || ledgers.find((x) => x.id === id)) continue;
 			ledgers.push(output);
 		}
 	});
@@ -122,7 +122,7 @@
 			color="error"
 			onclick={async () => {
 				if (!page.params.ledgerid) return;
-				await useLedgerStorage().del(page.params.ledgerid);
+				await useLedgerStore().removeItem(page.params.ledgerid);
 				goto('/');
 			}}
 		/>

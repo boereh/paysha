@@ -7,7 +7,7 @@
 </script>
 
 <nav
-	class="sticky top-0 border-b w-full p-4 border-surface-accented bg-white/75 backdrop-blur flex gap-4"
+	class="sticky top-0 border-b w-full p-4 border-surface-accented bg-inverted/75 backdrop-blur flex gap-4"
 >
 	<a href="/" class="w-fit">
 		<Logo class="h-8 <sm:hidden" />

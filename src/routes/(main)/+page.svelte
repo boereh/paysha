@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { LEDGER_SCHEMA, type Ledger } from '$lib/schemas';
-	import { useLedgerStorage } from '$lib/utils/ledger.svelte';
+	import { useLedgerStore } from '$lib/utils/ledger.svelte';
 	import { watch } from 'runed';
 	import { onMount } from 'svelte';
 	import { uid } from 'uid/secure';
@@ -10,16 +10,14 @@
 	import LedgerCard from '$lib/components/ledger-card.svelte';
 	import { page } from '$app/state';
 
-	const ledger_storage = useLedgerStorage();
+	const ledger_storage = useLedgerStore();
 	const ledgers = $state<Ledger[]>([]);
 	let loading = $state(true);
 
 	onMount(async () => {
-		const storage = useLedgerStorage();
-
-		for (const id of await storage.keys()) {
-			const { success, output } = safeParse(LEDGER_SCHEMA, await storage.get(id));
-			if (!success || ledgers.find((x) => x.id === output.id)) continue;
+		for (const id of await ledger_storage.keys()) {
+			const { success, output } = safeParse(LEDGER_SCHEMA, await ledger_storage.getItem(id));
+			if (!success || ledgers.find((x) => x.id === id)) continue;
 			ledgers.push(output);
 		}
 
@@ -33,8 +31,8 @@
 			for (const ledg of val) {
 				const prev_idx = (prev || []).findIndex((x) => x.id === ledg.id);
 
-				if (prev_idx < -1) ledger_storage.del(ledg.id);
-				else ledger_storage.set(ledg.id, ledg);
+				if (prev_idx < -1) ledger_storage.removeItem(ledg.id);
+				else ledger_storage.setItem(ledg.id, ledg);
 			}
 		},
 	);
@@ -74,9 +72,10 @@
 					ui={{ base: 'h-28 p-2 rounded-xl justify-center border-dashed text-' }}
 					onclick={async () => {
 						const id = uid();
+						const account_id = uid();
 
-						ledger_storage.set(id, {
-							accounts: [],
+						await ledger_storage.setItem(id, {
+							accounts: [{ id: account_id, name: 'Default', text: '', starting: 0 }],
 							created: Date.now(),
 							updated: Date.now(),
 							id,
@@ -90,6 +89,7 @@
 							rollover: true,
 							startdayofmonth: 1,
 							startdayofweek: 'monday',
+							default_account: account_id,
 						});
 
 						goto(`/${id}`);

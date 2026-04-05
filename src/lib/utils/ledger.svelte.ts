@@ -2,9 +2,13 @@ import { browser } from '$app/environment';
 import { LEDGER_SCHEMA, type Ledger } from '$lib/schemas';
 import { PersistedState, resource } from 'runed';
 import { createStorage } from 'unstorage';
-import idb from 'unstorage/drivers/indexedb';
 import localstorage from 'unstorage/drivers/localstorage';
 import { safeParse } from 'valibot';
+import localforage from 'localforage';
+
+export function useLedgerStore() {
+	return localforage.createInstance({ name: 'paysha', storeName: 'ledgers' });
+}
 
 export function useLocalStorage() {
 	return createStorage({
@@ -12,11 +16,11 @@ export function useLocalStorage() {
 	});
 }
 
-export function useLedgerStorage() {
-	return createStorage<Ledger>({
-		driver: idb({ dbName: 'paysha', storeName: 'ledgers' }),
-	});
-}
+// export function useLedgerStore() {
+// 	return createStorage<Ledger>({
+// 		driver: idb({ dbName: 'paysha', storeName: 'ledgers' }),
+// 	});
+// }
 
 export function createPersistedCurrentId() {
 	return new PersistedState<string | undefined>('paysha:current', undefined);
@@ -25,7 +29,7 @@ export function createPersistedCurrentId() {
 export class CurrentLedger {
 	private ledger = $state<Ledger>();
 	private _id = createPersistedCurrentId();
-	private storage = useLedgerStorage();
+	private storage = useLedgerStore();
 	// private subscriber: ReturnType<typeof createSubscriber>;
 
 	constructor() {
@@ -33,7 +37,7 @@ export class CurrentLedger {
 			() => this._id.current,
 			async (id) => {
 				if (!id) return (this.ledger = undefined);
-				const { success, output } = safeParse(LEDGER_SCHEMA, await this.storage.get(id));
+				const { success, output } = safeParse(LEDGER_SCHEMA, await this.storage.getItem(id));
 				if (!success) return (this.ledger = undefined);
 				this.ledger = output;
 			},
@@ -44,7 +48,7 @@ export class CurrentLedger {
 	}
 	set current(ledger: Ledger | undefined) {
 		if (!ledger) return;
-		this.storage.set(ledger.id, ledger);
+		this.storage.setItem(ledger.id, ledger);
 		this.ledger = ledger;
 	}
 	get id() {
@@ -62,7 +66,7 @@ export function useCurrentLedger() {
 		() => id.current,
 		async (v) => {
 			if (!v) return;
-			const { success, output } = safeParse(LEDGER_SCHEMA, await useLedgerStorage().get(v));
+			const { success, output } = safeParse(LEDGER_SCHEMA, await useLedgerStore().getItem(v));
 			if (!success) return;
 			return output;
 		},
@@ -80,7 +84,7 @@ export async function getCurrentLedger() {
 		const current = await useLocalStorage().get<string>('current');
 		if (!current) return;
 
-		const { success, output } = safeParse(LEDGER_SCHEMA, await useLedgerStorage().get(current));
+		const { success, output } = safeParse(LEDGER_SCHEMA, await useLedgerStore().getItem(current));
 		if (success) return output;
 	}
 }
