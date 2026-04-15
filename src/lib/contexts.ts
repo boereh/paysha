@@ -14,10 +14,9 @@ export type CreateTransaction = {
 	amount: number[];
 	type: 'expense' | 'income' | 'transfer';
 	category: string;
-	category_dialog: boolean;
 	account: string;
-	account_dialog: boolean;
-	recurring: undefined | [number, 'days' | 'weeks' | 'months'];
+	to_account: string;
+	recurring: null | [number, 'days' | 'weeks' | 'months'];
 	paid: boolean;
 	date: dayjs.Dayjs;
 };

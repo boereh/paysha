@@ -9,7 +9,6 @@
 	import { onMount } from 'svelte';
 	import { safeParse } from 'valibot';
 	import relative_tme from 'dayjs/plugin/relativeTime';
-	import Dialog from '$lib/components/dialog.svelte';
 	import CreateTransactionDialog from './create-transaction-dialog.svelte';
 	import Navigation from './navigation.svelte';
 
@@ -27,12 +26,11 @@
 		amount: [],
 		type: 'expense',
 		category: '',
-		category_dialog: false,
 		account: '',
-		account_dialog: false,
-		recurring: undefined,
+		recurring: null,
 		paid: true,
 		date: dayjs(),
+		to_account: '',
 	});
 
 	onMount(async () => {
@@ -75,13 +73,10 @@
 
 <CreateTransactionDialog />
 
-<Dialog bind:open={create_transaction.category_dialog}></Dialog>
-
 <style>
 	:global {
 		html,
 		body {
-			scrollbar-width: thin;
 			@apply: <sm:pb-[calc(var(--spacing)*16+1px)];
 		}
 	}

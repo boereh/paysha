@@ -69,13 +69,12 @@
 					size="xl"
 					icon="i-ph:plus-circle"
 					label="Create ledger"
-					ui={{ base: 'h-28 p-2 rounded-xl justify-center border-dashed text-' }}
+					ui={{ base: 'h-28 p-2 rounded-xl justify-center border-dashed border-surface-accented' }}
 					onclick={async () => {
 						const id = uid();
-						const account_id = uid();
 
-						await ledger_storage.setItem(id, {
-							accounts: [{ id: account_id, name: 'Default', text: '', starting: 0 }],
+						await ledger_storage.setItem<Ledger>(id, {
+							accounts: [],
 							created: Date.now(),
 							updated: Date.now(),
 							id,
@@ -89,7 +88,8 @@
 							rollover: true,
 							startdayofmonth: 1,
 							startdayofweek: 'monday',
-							default_account: account_id,
+							default_account: '',
+							categories: [],
 						});
 
 						goto(`/${id}`);

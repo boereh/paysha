@@ -20,6 +20,7 @@ export type Account = InferInput<typeof ACCOUNT_SCHEMA>;
 export type Transaction = InferInput<typeof TRANSACTION_SCHEMA>;
 export type Reccurring = InferInput<typeof RECCURING_SCHEMA>;
 export type Budget = InferInput<typeof BUDGET_SCHEMA>;
+export type Category = InferInput<typeof CATREORY_SCHEMA>;
 
 export const ACCOUNT_SCHEMA = object({
 	id: string(),
@@ -27,12 +28,11 @@ export const ACCOUNT_SCHEMA = object({
 	text: string(),
 	starting: number(),
 	/** For account like credit cards */
-	creditline: optional(pipe(number(), maxValue(0))),
+	max: optional(pipe(number(), minValue(0))),
 });
 
 export const CATREORY_SCHEMA = object({
 	id: string(),
-	type: union([literal('income'), literal('expense')]),
 	name: string(),
 	icon: string(),
 	color: string(),
@@ -58,7 +58,7 @@ export const BUDGET_SCHEMA = object({
 	frequency: union([literal('day'), literal('week'), literal('biweek'), literal('month')]),
 	rollover: boolean(),
 	starting: number(),
-	categories: array(CATREORY_SCHEMA),
+	categories: array(string()),
 });
 
 export const LEDGER_SCHEMA = object({
@@ -67,6 +67,7 @@ export const LEDGER_SCHEMA = object({
 	updated: number(),
 	created: number(),
 	authors: array(string()),
+	categories: array(CATREORY_SCHEMA),
 	transactions: array(TRANSACTION_SCHEMA),
 	accounts: array(ACCOUNT_SCHEMA),
 	recurrings: array(RECCURING_SCHEMA),

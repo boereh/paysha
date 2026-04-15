@@ -19,6 +19,10 @@
 
 <style>
 	:global {
+		html {
+			overscroll-behavior: none;
+		}
+
 		body {
 			@apply bg-inverted;
 		}
