@@ -1,10 +1,7 @@
 import { LEDGER_SCHEMA, type Ledger } from "./schemas";
-import { createStorage } from "unstorage";
-import localstorage from "unstorage/drivers/localstorage";
-import { safeParse } from "valibot";
 import localforage from "localforage";
 
-export function useLedgerStore() {
+export function useLedgerForage() {
   return localforage.createInstance({ name: "paysha", storeName: "ledgers" });
 }
 
@@ -29,7 +26,7 @@ export function useCurrentLedger() {
 //   const id = useCurrentId();
 
 //   if (typeof document !== "undefined") {
-//     const store = useLedgerStore();
+//     const store = useLedgerForage();
 //   }
 
 //   return { ledger, id };
@@ -38,7 +35,7 @@ export function useCurrentLedger() {
 // export class CurrentLedger {
 //   private ledger = $state<Ledger>();
 //   private _id = createPersistedCurrentId();
-//   private storage = useLedgerStore();
+//   private storage = useLedgerForage();
 //   // private subscriber: ReturnType<typeof createSubscriber>;
 
 //   constructor() {
@@ -80,7 +77,7 @@ export function useCurrentLedger() {
 //       if (!v) return;
 //       const { success, output } = safeParse(
 //         LEDGER_SCHEMA,
-//         await useLedgerStore().getItem(v),
+//         await useLedgerForage().getItem(v),
 //       );
 //       if (!success) return;
 //       return output;
@@ -101,7 +98,7 @@ export function useCurrentLedger() {
 
 //     const { success, output } = safeParse(
 //       LEDGER_SCHEMA,
-//       await useLedgerStore().getItem(current),
+//       await useLedgerForage().getItem(current),
 //     );
 //     if (success) return output;
 //   }
